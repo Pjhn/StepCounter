@@ -21,7 +21,7 @@ object Colors {
 
     val LightColorScheme = lightColorScheme(
         primary = Color(0xFF4D61D7),
-        secondary = Color(0xFF4D61D7),
+        secondary = Color(0xFFE3EAFF),
         tertiary = Color(0xFF4D61D7),
         background = Color(0xFFFCFCFC),
         surface = Color.DarkGray,
@@ -30,6 +30,7 @@ object Colors {
         onSecondary = Color(0xFF363636),
         onBackground = Color(0xFF363636),
         onSurface = Color(0xFF363636),
-        onError = Color.White
+        onError = Color.White,
+        outline = Color(0xFF363636)
     )
 }

@@ -84,7 +84,7 @@ val Typography = Typography(
         fontFamily = notoSansRegular,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+        letterSpacing = 0.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = notoSansRegular,
