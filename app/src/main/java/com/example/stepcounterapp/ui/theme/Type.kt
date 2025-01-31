@@ -68,12 +68,12 @@ val Typography = Typography(
     ),
     titleMedium = TextStyle(
         fontFamily = notoSansMedium,
-        fontSize = 18.sp,
+        fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = notoSansRegular,
+        fontFamily = notoSansMedium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
@@ -101,7 +101,7 @@ val Typography = Typography(
 
     //라벨 스타일 (버튼, 태그 등에 사용)
     labelLarge = TextStyle(
-        fontFamily = notoSansBold,
+        fontFamily = notoSansMedium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
