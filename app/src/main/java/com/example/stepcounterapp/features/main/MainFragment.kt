@@ -19,8 +19,7 @@ class MainFragment: Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 StepCounterAppTheme {
-                    Text("MainFragment")
-                    //MainScreen()
+                    MainScreen()
                 }
             }
         }
