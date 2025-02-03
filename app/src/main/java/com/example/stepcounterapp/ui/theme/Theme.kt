@@ -6,12 +6,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.example.stepcounterapp.ui.theme.Colors.DarkColorScheme
-import com.example.stepcounterapp.ui.theme.Colors.LightColorScheme
+
+private val LocalColors = staticCompositionLocalOf { ColorSet.Light.lightColors }
 
 @Composable
 fun StepCounterAppTheme(
@@ -21,8 +24,8 @@ fun StepCounterAppTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> ColorSet.Black.darkColors
+        else -> ColorSet.Light.lightColors
     }
 
     val view = LocalView.current
@@ -34,10 +37,19 @@ fun StepCounterAppTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = typography,
-        shapes = shapes,
-        content = content
-    )
+    CompositionLocalProvider(
+        LocalColors provides colorScheme
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme.material,
+            typography = typography,
+            shapes = shapes,
+            content = content
+        )
+    }
 }
+
+val MaterialTheme.colors: CustomColors
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalColors.current
