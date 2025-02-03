@@ -17,6 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.stepcounterapp.ui.theme.Paddings
 import com.example.stepcounterapp.ui.theme.StepCounterAppTheme
 
+private val SECONDARY_BUTTON_PADDING_VERTICAL = Paddings.medium
+private val SECONDARY_BUTTON_PADDING_HORIZONTAL = Paddings.large
+
 @Composable
 fun SecondaryButton(
     modifier: Modifier = Modifier,
@@ -27,10 +30,8 @@ fun SecondaryButton(
     Button(
         modifier = modifier.wrapContentSize()
             .padding(
-                top = Paddings.medium,
-                bottom = Paddings.medium,
-                start = Paddings.large,
-                end = Paddings.large
+                vertical = SECONDARY_BUTTON_PADDING_VERTICAL,
+                horizontal = SECONDARY_BUTTON_PADDING_HORIZONTAL
             ),
         shape = MaterialTheme.shapes.medium,
         onClick = onClick,
