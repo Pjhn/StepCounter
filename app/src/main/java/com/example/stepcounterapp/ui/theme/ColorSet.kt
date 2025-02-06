@@ -26,7 +26,8 @@ sealed class ColorSet {
             ),
             text= Color(0xFF363636),
             outlinedButton = Color(0XFFEFEFEF),
-            divider = Color(0XFFEFEFEF)
+            divider = Color(0XFFEFEFEF),
+            pauseButton = Color(0XFF4D61D7)
         )
     }
 
