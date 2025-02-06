@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,18 +26,14 @@ fun PrimaryButton(
     modifier: Modifier = Modifier,
     @StringRes id: Int? = null,
     text: String = "",
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    colors: ButtonColors
 ) {
     Button(
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContentColor = MaterialTheme.colorScheme.secondary,
-            disabledContainerColor = MaterialTheme.colorScheme.outline
-        )
+        colors = colors
     ) {
         Row(
             modifier = modifier.padding(
@@ -59,8 +56,14 @@ fun PrimaryButton(
 fun PrimaryButtonPreview() {
     StepCounterAppTheme {
         PrimaryButton(
-            text = "미리보기"
-        ) {
-        }
+            text = "미리보기",
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                disabledContentColor = MaterialTheme.colorScheme.secondary,
+                disabledContainerColor = MaterialTheme.colorScheme.outline
+            ),
+            onClick = {}
+        )
     }
 }

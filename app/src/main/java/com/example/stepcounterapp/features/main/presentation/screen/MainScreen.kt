@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.stepcounterapp.R
 import com.example.stepcounterapp.features.common.model.UserRecord
+import com.example.stepcounterapp.features.main.presentation.input.IMainViewModelInput
+import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.features.main.presentation.screen.components.MainTopAppBar
 import com.example.stepcounterapp.features.main.presentation.screen.components.PrimaryButtonSection
 import com.example.stepcounterapp.features.main.presentation.screen.components.RecordDetailSection
@@ -25,6 +27,8 @@ import java.time.LocalDateTime
 
 @Composable
 fun MainScreen(
+    mainStateHolder: State<MainState>,
+    input: IMainViewModelInput,
     userRecord: State<UserRecord>
 ) {
     val currentDate = remember {
@@ -39,7 +43,7 @@ fun MainScreen(
                     SecondaryButton(
                         text = stringResource(id = R.string.view_records),
                         modifier = Modifier.wrapContentSize(),
-                        onClick = {}
+                        onClick = { input.openSensitivityDialog() }
                     )
                 }
             )
@@ -61,7 +65,10 @@ fun MainScreen(
             RecordDetailSection(userRecord = userRecord.value)
             Divider(color = MaterialTheme.colors.divider)
 
-            PrimaryButtonSection()
+            PrimaryButtonSection(
+                mainStateHolder = mainStateHolder,
+                input = input
+            )
         }
     }
 }
