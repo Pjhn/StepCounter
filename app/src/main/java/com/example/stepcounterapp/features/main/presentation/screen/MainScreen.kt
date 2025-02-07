@@ -62,7 +62,10 @@ fun MainScreen(
             SensorButtonSection()
             Divider(color = MaterialTheme.colors.divider)
 
-            RecordDetailSection(userRecord = userRecord.value)
+            RecordDetailSection(
+                mainStateHolder = mainStateHolder,
+                userRecord = userRecord.value
+            )
             Divider(color = MaterialTheme.colors.divider)
 
             PrimaryButtonSection(

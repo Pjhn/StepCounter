@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -19,11 +20,14 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.stepcounterapp.R
 import com.example.stepcounterapp.features.common.model.UserRecord
+import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.ui.theme.Paddings
+import com.example.stepcounterapp.ui.theme.colors
 import kotlin.time.Duration
 
 @Composable
 fun RecordDetailSection(
+    mainStateHolder: State<MainState>,
     userRecord: UserRecord
 ) {
     Box(
@@ -39,42 +43,63 @@ fun RecordDetailSection(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_cal),
-                    contentDescription = "칼로리 아이콘",
-                )
-                Spacer(modifier = Modifier.padding(Paddings.small))
-                Text(
-                    text = userRecord.calories.toString(),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                )
-                Spacer(modifier = Modifier.padding(Paddings.xsmall))
-                Text(
-                    text = stringResource(id = R.string.calories_unit),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_time),
-                    contentDescription = "시계 아이콘",
-                )
-                Spacer(modifier = Modifier.padding(Paddings.small))
-                Text(
-                    text = formatDuration(userRecord.measurementTime),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                )
-            }
+            CaloriesRow(mainStateHolder, userRecord)
+            TimeRow(mainStateHolder, userRecord)
         }
+    }
+}
+
+@Composable
+private fun CaloriesRow(
+    mainStateHolder: State<MainState>,
+    userRecord: UserRecord
+) {
+    val isMeasuring = mainStateHolder.value is MainState.Measuring
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_cal),
+            tint = if (isMeasuring) MaterialTheme.colors.brandColor else MaterialTheme.colors.primary,
+            contentDescription = if (isMeasuring) "활성화 칼로리 아이콘" else "칼로리 아이콘",
+        )
+        Spacer(modifier = Modifier.padding(Paddings.small))
+        Text(
+            text = userRecord.calories.toString(),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.outline,
+        )
+        Spacer(modifier = Modifier.padding(Paddings.xsmall))
+        Text(
+            text = stringResource(id = R.string.calories_unit),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.outline,
+        )
+    }
+}
+
+@Composable
+private fun TimeRow(
+    mainStateHolder: State<MainState>,
+    userRecord: UserRecord
+) {
+    val isMeasuring = mainStateHolder.value is MainState.Measuring
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_time),
+            contentDescription = if (isMeasuring) "활성화 시계 아이콘" else "시계 아이콘",
+            tint = if (isMeasuring) MaterialTheme.colors.brandColor else MaterialTheme.colors.primary
+        )
+        Spacer(modifier = Modifier.padding(Paddings.small))
+        Text(
+            text = formatDuration(userRecord.measurementTime),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.outline
+        )
     }
 }
 
