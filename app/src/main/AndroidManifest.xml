@@ -19,7 +19,7 @@
         android:theme="@style/Theme.StepCounterApp"
         tools:targetApi="31">
         <service
-            android:name=".features.service.MeasurementService"
+            android:name=".features.main.service.MeasurementService"
             android:exported="false"
             android:foregroundServiceType="health" />
 

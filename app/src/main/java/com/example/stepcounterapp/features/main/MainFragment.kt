@@ -20,7 +20,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.stepcounterapp.features.main.presentation.output.MainUiEffect
 import com.example.stepcounterapp.features.main.presentation.screen.MainScreen
 import com.example.stepcounterapp.features.main.presentation.viewmodel.MainViewModel
-import com.example.stepcounterapp.features.service.MeasurementService
+import com.example.stepcounterapp.features.main.service.MeasurementService
 import com.example.stepcounterapp.ui.theme.StepCounterAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

@@ -1,4 +1,4 @@
-package com.example.stepcounterapp.features.repository
+package com.example.stepcounterapp.features.common.repository
 
 import com.example.stepcounterapp.features.common.model.UserRecord
 import javax.inject.Inject

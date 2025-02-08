@@ -1,4 +1,4 @@
-package com.example.stepcounterapp.features.service
+package com.example.stepcounterapp.features.main.service
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -53,7 +53,8 @@ class MeasurementService : Service(), SensorEventListener {
                 initialStepCount = totalSteps
             }
             val stepsSinceStart = totalSteps - initialStepCount
-            Log.d(TAG, "걸음 수: $stepsSinceStart, " +
+            Log.d(
+                TAG, "걸음 수: $stepsSinceStart, " +
                         "totalSteps: $totalSteps, initialStepCount: $initialStepCount"
             )
         }
@@ -95,7 +96,7 @@ class MeasurementService : Service(), SensorEventListener {
         val notification: Notification = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_time)
             .setContentTitle(getString(R.string.app_name))
-            .setContentText("테스트 용 컨텐츠 텍스트")
+            .setContentText("걸음을 측정 중입니다")
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
