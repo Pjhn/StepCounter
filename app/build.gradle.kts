@@ -56,6 +56,11 @@ dependencies {
     //android
     implementation(libs.androidx.appcompat)
 
+    //room
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
     //hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
