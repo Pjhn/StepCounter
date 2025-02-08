@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.stepcounterapp.R
-import com.example.stepcounterapp.features.common.model.UserRecord
+import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.ui.theme.Paddings
 import com.example.stepcounterapp.ui.theme.colors
@@ -28,7 +28,7 @@ import kotlin.time.Duration
 @Composable
 fun RecordDetailSection(
     mainStateHolder: State<MainState>,
-    userRecord: UserRecord
+    stepRecord: StepRecord
 ) {
     Box(
         modifier = Modifier
@@ -43,8 +43,8 @@ fun RecordDetailSection(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            CaloriesRow(mainStateHolder, userRecord)
-            TimeRow(mainStateHolder, userRecord)
+            CaloriesRow(mainStateHolder, stepRecord)
+            TimeRow(mainStateHolder, stepRecord)
         }
     }
 }
@@ -52,7 +52,7 @@ fun RecordDetailSection(
 @Composable
 private fun CaloriesRow(
     mainStateHolder: State<MainState>,
-    userRecord: UserRecord
+    stepRecord: StepRecord
 ) {
     val isMeasuring = mainStateHolder.value is MainState.Measuring
 
@@ -66,7 +66,7 @@ private fun CaloriesRow(
         )
         Spacer(modifier = Modifier.padding(Paddings.small))
         Text(
-            text = userRecord.calories.toString(),
+            text = stepRecord.calories.toString(),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline,
         )
@@ -82,7 +82,7 @@ private fun CaloriesRow(
 @Composable
 private fun TimeRow(
     mainStateHolder: State<MainState>,
-    userRecord: UserRecord
+    stepRecord: StepRecord
 ) {
     val isMeasuring = mainStateHolder.value is MainState.Measuring
 
@@ -96,7 +96,7 @@ private fun TimeRow(
         )
         Spacer(modifier = Modifier.padding(Paddings.small))
         Text(
-            text = formatDuration(userRecord.measurementTime),
+            text = formatDuration(stepRecord.measurementTime),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline
         )

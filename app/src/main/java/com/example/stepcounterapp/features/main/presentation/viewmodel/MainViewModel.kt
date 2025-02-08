@@ -2,7 +2,7 @@ package com.example.stepcounterapp.features.main.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.stepcounterapp.features.common.model.UserRecord
+import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.main.domain.usecase.GetUserRecordUseCase
 import com.example.stepcounterapp.features.main.presentation.input.IMainViewModelInput
 import com.example.stepcounterapp.features.main.presentation.output.IMainViewModelOutput
@@ -33,14 +33,14 @@ class MainViewModel @Inject constructor(
     override val mainUiEffect: SharedFlow<MainUiEffect>
         get() = _mainUiEffect
 
-    private val _userRecord = MutableStateFlow<UserRecord>(
-        UserRecord(
+    private val _stepRecord = MutableStateFlow<StepRecord>(
+        StepRecord(
             stepCount = 0,
             distance = 0.0
         )
     )
-    val userRecord: StateFlow<UserRecord>
-        get() = _userRecord
+    val stepRecord: StateFlow<StepRecord>
+        get() = _stepRecord
 
     init {
         fetchMain()
@@ -53,7 +53,7 @@ class MainViewModel @Inject constructor(
             val userRecord = getUserRecordUseCase()
             _mainState.value = userRecord.fold(
                 onSuccess = { record ->
-                    _userRecord.value = record
+                    _stepRecord.value = record
                     MainState.Main
                 },
                 onFailure = { error ->

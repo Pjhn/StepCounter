@@ -48,7 +48,7 @@ class MainFragment : Fragment() {
                     MainScreen(
                         mainStateHolder = viewModel.mainState.collectAsState(),
                         input = viewModel.input,
-                        userRecord = viewModel.userRecord.collectAsState()
+                        stepRecord = viewModel.stepRecord.collectAsState()
                     )
                 }
             }

@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.stepcounterapp.R
-import com.example.stepcounterapp.features.common.model.UserRecord
+import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.main.presentation.input.IMainViewModelInput
 import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.features.main.presentation.screen.components.MainTopAppBar
@@ -29,7 +29,7 @@ import java.time.LocalDateTime
 fun MainScreen(
     mainStateHolder: State<MainState>,
     input: IMainViewModelInput,
-    userRecord: State<UserRecord>
+    stepRecord: State<StepRecord>
 ) {
     val currentDate = remember {
         LocalDateTime.now()
@@ -55,7 +55,7 @@ fun MainScreen(
                 .padding(paddingValues)
         ) {
             StepCountSection(
-                userRecord = userRecord.value,
+                stepRecord = stepRecord.value,
                 modifier = Modifier.weight(1f)
             )
 
@@ -64,7 +64,7 @@ fun MainScreen(
 
             RecordDetailSection(
                 mainStateHolder = mainStateHolder,
-                userRecord = userRecord.value
+                stepRecord = stepRecord.value
             )
             Divider(color = MaterialTheme.colors.divider)
 
