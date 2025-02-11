@@ -103,8 +103,8 @@ private fun TimeRow(
     }
 }
 
-fun formatDuration(duration: Duration): String {
-    val totalSeconds = duration.inWholeSeconds
+fun formatDuration(duration: Duration?): String {
+    val totalSeconds = duration?.inWholeSeconds ?: 0
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
     val seconds = totalSeconds % 60
