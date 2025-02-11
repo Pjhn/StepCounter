@@ -24,6 +24,7 @@ sealed class ColorSet {
                 onError = Color.White,
                 outline = Color(0xFF363636)
             ),
+            brandColor = Color(0XFF4D61D7),
             text= Color(0xFF363636),
             outlinedButton = Color(0XFFEFEFEF),
             divider = Color(0XFFEFEFEF),

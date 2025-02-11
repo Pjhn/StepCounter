@@ -2,8 +2,8 @@ package com.example.stepcounterapp.features.main.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.stepcounterapp.features.common.model.UserRecord
-import com.example.stepcounterapp.features.main.domain.usecase.GetUserRecordUseCase
+import com.example.stepcounterapp.features.common.model.StepRecord
+import com.example.stepcounterapp.features.common.repository.UserRecordRepository
 import com.example.stepcounterapp.features.main.presentation.input.IMainViewModelInput
 import com.example.stepcounterapp.features.main.presentation.output.IMainViewModelOutput
 import com.example.stepcounterapp.features.main.presentation.output.MainState
@@ -12,13 +12,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getUserRecordUseCase: GetUserRecordUseCase
+    private val userRecordRepository: UserRecordRepository
 ) : ViewModel(), IMainViewModelInput, IMainViewModelOutput {
 
     val output: IMainViewModelOutput = this
@@ -33,35 +35,18 @@ class MainViewModel @Inject constructor(
     override val mainUiEffect: SharedFlow<MainUiEffect>
         get() = _mainUiEffect
 
-    private val _userRecord = MutableStateFlow<UserRecord>(
-        UserRecord(
+    private val _stepRecord = MutableStateFlow<StepRecord>(
+        StepRecord(
             stepCount = 0,
             distance = 0.0
         )
     )
-    val userRecord: StateFlow<UserRecord>
-        get() = _userRecord
-
-    init {
-        fetchMain()
-    }
-
-    private fun fetchMain() {
-        viewModelScope.launch {
-            _mainState.value = MainState.Loading
-
-            val userRecord = getUserRecordUseCase()
-            _mainState.value = userRecord.fold(
-                onSuccess = { record ->
-                    _userRecord.value = record
-                    MainState.Main
-                },
-                onFailure = { error ->
-                    MainState.Failed(reason = error.message ?: "")
-                }
-            )
-        }
-    }
+    val stepRecord: StateFlow<StepRecord> = userRecordRepository.userRecord
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = StepRecord()
+        )
 
     override fun startMeasurement() {
         viewModelScope.launch {

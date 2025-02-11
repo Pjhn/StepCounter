@@ -11,8 +11,12 @@ composeBom = "2024.01.00"
 navigation = "2.8.5"
 hilt = "2.48.1"
 appcompat = "1.7.0"
+room = "2.6.1"
 
 [libraries]
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation"}

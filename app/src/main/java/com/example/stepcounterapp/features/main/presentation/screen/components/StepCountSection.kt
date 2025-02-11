@@ -15,12 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.stepcounterapp.R
-import com.example.stepcounterapp.features.common.model.UserRecord
+import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.ui.theme.Paddings
 
 @Composable
 fun StepCountSection(
-    userRecord: UserRecord,
+    stepRecord: StepRecord,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -37,7 +37,7 @@ fun StepCountSection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${userRecord.stepCount}",
+                    text = "${stepRecord.stepCount}",
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.alignByBaseline()
@@ -55,7 +55,7 @@ fun StepCountSection(
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    text = "${userRecord.distance}",
+                    text = "${stepRecord.distance}",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.alignByBaseline()

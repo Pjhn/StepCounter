@@ -13,7 +13,8 @@ data class CustomColors (
     val text: Color = Color.Black,
     val outlinedButton: Color = Color.Black,
     val divider: Color = Color.DarkGray,
-    val pauseButton: Color = Color.Blue
+    val pauseButton: Color = Color.Blue,
+    val brandColor: Color = Color.Blue
 ) {
     val primary: Color get() = material.primary
     val onPrimary: Color get() = material.onPrimary

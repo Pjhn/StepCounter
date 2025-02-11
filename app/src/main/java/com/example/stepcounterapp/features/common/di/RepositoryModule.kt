@@ -1,7 +1,7 @@
 package com.example.stepcounterapp.features.common.di
 
-import com.example.stepcounterapp.features.repository.IUserRecordRepository
-import com.example.stepcounterapp.features.repository.UserRecordRepository
+import com.example.stepcounterapp.features.common.repository.IUserRecordRepository
+import com.example.stepcounterapp.features.common.repository.UserRecordRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
