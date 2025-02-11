@@ -17,14 +17,21 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.stepcounterapp.MainActivity
 import com.example.stepcounterapp.R
+import com.example.stepcounterapp.features.common.model.StepRecord
+import com.example.stepcounterapp.features.common.repository.IUserRecordRepository
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MeasurementService : Service(), SensorEventListener {
-
     @Inject
     lateinit var sensorManager: SensorManager
+
+    @Inject
+    lateinit var userRecordRepository: IUserRecordRepository
 
     private var stepCounterSensor: Sensor? = null
 
@@ -57,6 +64,13 @@ class MeasurementService : Service(), SensorEventListener {
                 TAG, "걸음 수: $stepsSinceStart, " +
                         "totalSteps: $totalSteps, initialStepCount: $initialStepCount"
             )
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val record = StepRecord(
+                    stepCount = stepsSinceStart.toInt()
+                )
+                userRecordRepository.saveUserRecord(record)
+            }
         }
     }
 
