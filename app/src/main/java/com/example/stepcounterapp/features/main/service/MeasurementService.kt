@@ -111,7 +111,7 @@ class MeasurementService : Service(), SensorEventListener {
         val notification: Notification = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_time)
             .setContentTitle(getString(R.string.app_name))
-            .setContentText("걸음을 측정 중입니다")
+            .setContentText(getString(R.string.notification_body))
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()

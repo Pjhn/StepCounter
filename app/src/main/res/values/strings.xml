@@ -11,4 +11,5 @@
     <string name="sensitivity">Sensitivity</string>
     <string name="steps">STEPS</string>
     <string name="distance_unit">m</string>
+    <string name="notification_body">Measuring steps</string>
 </resources>
