@@ -1,16 +1,15 @@
 package com.example.stepcounterapp.util
 
 import androidx.room.TypeConverter
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.LocalDate
 
 class Converters {
     @TypeConverter
-    fun timeStampToLocalDateTime(timeStamp: Long?): LocalDateTime? {
-        return timeStamp?.let { LocalDateTime.ofEpochSecond(it, 0, ZoneOffset.UTC)}
+    fun timeStampToLocalDate(timeStamp: Long?): LocalDate? {
+        return timeStamp?.let { LocalDate.ofEpochDay(it) }
     }
     @TypeConverter
-    fun localDateTimeToTimeStamp(date: LocalDateTime?): Long? {
-        return date?.toEpochSecond(ZoneOffset.UTC)
+    fun localDateTimeToTimeStamp(date: LocalDate?): Long? {
+        return date?.toEpochDay()
     }
 }

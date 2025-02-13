@@ -4,7 +4,7 @@ import com.example.stepcounterapp.features.common.database.dao.StepRecordDao
 import com.example.stepcounterapp.features.common.database.entity.StepRecordEntity
 import com.example.stepcounterapp.features.common.model.StepRecord
 import kotlinx.coroutines.flow.map
-import java.time.LocalDateTime
+import java.time.LocalDate
 import javax.inject.Inject
 
 class UserRecordRepository @Inject constructor(
@@ -27,10 +27,10 @@ class UserRecordRepository @Inject constructor(
 
     override suspend fun saveUserRecord(record: StepRecord) {
         val entity = StepRecordEntity(
-            date = LocalDateTime.now(),
+            date = LocalDate.now(),
             stepCount = record.stepCount ?: 0
         )
-        stepRecordDao.insert(entity)
+        stepRecordDao.upsert(entity)
     }
 
     companion object {
