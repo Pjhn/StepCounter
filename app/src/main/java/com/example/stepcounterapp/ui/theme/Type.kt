@@ -1,7 +1,6 @@
 package com.example.stepcounterapp.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -9,79 +8,79 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.stepcounterapp.R
 
-private val notoSansBold = FontFamily(
-    Font(R.font.noto_sans_kr_bold, FontWeight.Bold)
+private val dmSansBold = FontFamily(
+    Font(R.font.dm_sans_bold, FontWeight.Bold)
 )
-private val notoSansRegular = FontFamily(
-    Font(R.font.noto_sans_kr_regular, FontWeight.Normal)
+private val dmSansRegular = FontFamily(
+    Font(R.font.dm_sans_regular, FontWeight.Normal)
 )
-private val notoSansMedium = FontFamily(
-    Font(R.font.noto_sans_kr_medium, FontWeight.Medium)
+private val dmSansMedium = FontFamily(
+    Font(R.font.dm_sans_medium, FontWeight.Medium)
 )
 
 val Typography = Typography(
     displayLarge = TextStyle(
-        fontFamily = notoSansBold,
-        fontSize = 60.sp
-    ),
-    displayMedium = TextStyle(
-        fontFamily = notoSansBold,
+        fontFamily = dmSansRegular,
         fontSize = 48.sp
     ),
-    displaySmall = TextStyle(
-        fontFamily = notoSansBold,
+    displayMedium = TextStyle(
+        fontFamily = dmSansRegular,
         fontSize = 36.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = dmSansRegular,
+        fontSize = 18.sp
     ),
 
     headlineLarge = TextStyle(
-        fontFamily = notoSansBold,
+        fontFamily = dmSansBold,
         fontSize = 32.sp
     ),
     headlineMedium = TextStyle(
-        fontFamily = notoSansBold,
+        fontFamily = dmSansBold,
         fontSize = 28.sp
     ),
     headlineSmall = TextStyle(
-        fontFamily = notoSansBold,
+        fontFamily = dmSansBold,
         fontSize = 24.sp
     ),
 
     titleLarge = TextStyle(
-        fontFamily = notoSansMedium,
+        fontFamily = dmSansMedium,
         fontSize = 22.sp
     ),
     titleMedium = TextStyle(
-        fontFamily = notoSansMedium,
+        fontFamily = dmSansMedium,
         fontSize = 16.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = notoSansMedium,
+        fontFamily = dmSansMedium,
         fontSize = 14.sp
     ),
 
     bodyLarge = TextStyle(
-        fontFamily = notoSansRegular,
+        fontFamily = dmSansRegular,
         fontSize = 16.sp
     ),
     bodyMedium = TextStyle(
-        fontFamily = notoSansRegular,
+        fontFamily = dmSansRegular,
         fontSize = 14.sp
     ),
     bodySmall = TextStyle(
-        fontFamily = notoSansRegular,
+        fontFamily = dmSansRegular,
         fontSize = 12.sp
     ),
 
     labelLarge = TextStyle(
-        fontFamily = notoSansMedium,
+        fontFamily = dmSansMedium,
         fontSize = 14.sp
     ),
     labelMedium = TextStyle(
-        fontFamily = notoSansMedium,
+        fontFamily = dmSansMedium,
         fontSize = 12.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = notoSansRegular,
+        fontFamily = dmSansRegular,
         fontSize = 10.sp
     )
 )
