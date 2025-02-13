@@ -3,8 +3,8 @@ package com.example.stepcounterapp.ui.components.button
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -20,7 +20,7 @@ import com.example.stepcounterapp.ui.theme.StepCounterAppTheme
 import com.example.stepcounterapp.ui.theme.colors
 
 private val SECONDARY_BUTTON_PADDING_VERTICAL = Paddings.medium
-private val SECONDARY_BUTTON_PADDING_HORIZONTAL = Paddings.small
+private val SECONDARY_BUTTON_PADDING_HORIZONTAL = Paddings.medium
 private val BUTTON_BORDER_WIDTH = 1.dp
 
 @Composable
@@ -31,15 +31,14 @@ fun SecondaryButton(
     onClick: () -> Unit
 ) {
     OutlinedButton(
-        modifier = modifier
-            .wrapContentSize()
-            .padding(
-                vertical = SECONDARY_BUTTON_PADDING_VERTICAL,
-                horizontal = SECONDARY_BUTTON_PADDING_HORIZONTAL
-            ),
+        modifier = modifier.wrapContentSize(),
         shape = MaterialTheme.shapes.medium,
         onClick = onClick,
-        border = BorderStroke(BUTTON_BORDER_WIDTH, MaterialTheme.colors.outlinedButton)
+        border = BorderStroke(BUTTON_BORDER_WIDTH, MaterialTheme.colors.outlinedButton),
+        contentPadding = PaddingValues(
+            horizontal = SECONDARY_BUTTON_PADDING_HORIZONTAL,
+            vertical = SECONDARY_BUTTON_PADDING_VERTICAL
+        )
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
