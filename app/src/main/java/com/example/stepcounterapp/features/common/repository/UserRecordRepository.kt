@@ -38,7 +38,7 @@ class UserRecordRepository @Inject constructor(
 
     companion object {
         private const val STEP_LENGTH = 0.8
-        private const val CALORIE_PER_STEP = 1.0
+        private const val CALORIE_PER_STEP = 0.04
         private const val TIME_PER_STEP = 0.6
     }
 }
