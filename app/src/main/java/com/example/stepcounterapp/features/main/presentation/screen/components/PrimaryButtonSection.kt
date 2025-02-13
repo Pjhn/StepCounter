@@ -1,6 +1,7 @@
 package com.example.stepcounterapp.features.main.presentation.screen.components
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
@@ -17,21 +18,28 @@ import com.example.stepcounterapp.ui.components.button.PrimaryButton
 import com.example.stepcounterapp.ui.theme.Paddings
 import com.example.stepcounterapp.ui.theme.colors
 
+private val SECTION_PADDING_HORIZONTAL = Paddings.extra
+private val SECTION_PADDING_VERTICAL = Paddings.xlarge
+
 @Composable
 fun PrimaryButtonSection(
     mainStateHolder: State<MainState>,
     input: IMainViewModelInput
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = Paddings.xlarge)
+            .padding(
+                horizontal = SECTION_PADDING_HORIZONTAL,
+                vertical = SECTION_PADDING_VERTICAL
+            ),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        when(mainStateHolder.value){
+        when (mainStateHolder.value) {
             is MainState.Measuring -> {
                 PrimaryButton(
                     text = stringResource(id = R.string.pause),
-                    modifier = Modifier.align(Alignment.Center),
                     onClick = {
                         input.pauseMeasurement()
                     },
@@ -43,10 +51,10 @@ fun PrimaryButtonSection(
                     )
                 )
             }
+
             else -> {
                 PrimaryButton(
-                    text = stringResource(id = R.string.start_measurement),
-                    modifier = Modifier.align(Alignment.Center),
+                    text = stringResource(id = R.string.start),
                     onClick = {
                         input.startMeasurement()
                     },
@@ -59,6 +67,5 @@ fun PrimaryButtonSection(
                 )
             }
         }
-
     }
 }
