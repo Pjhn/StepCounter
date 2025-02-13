@@ -38,13 +38,13 @@ fun StepCountSection(
             ) {
                 Text(
                     text = "${stepRecord.stepCount}",
-                    style = MaterialTheme.typography.displaySmall,
+                    style = MaterialTheme.typography.displayLarge,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.alignByBaseline()
                 )
                 Spacer(Modifier.padding(Paddings.small))
                 Text(
-                    text = "걸음",
+                    text = stringResource(id = R.string.steps),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.alignByBaseline()
