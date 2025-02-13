@@ -35,12 +35,6 @@ class MainViewModel @Inject constructor(
     override val mainUiEffect: SharedFlow<MainUiEffect>
         get() = _mainUiEffect
 
-    private val _stepRecord = MutableStateFlow<StepRecord>(
-        StepRecord(
-            stepCount = 0,
-            distance = 0.0
-        )
-    )
     val stepRecord: StateFlow<StepRecord> = userRecordRepository.userRecord
         .stateIn(
             scope = viewModelScope,

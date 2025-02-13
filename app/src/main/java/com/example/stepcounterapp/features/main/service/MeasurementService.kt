@@ -58,6 +58,7 @@ class MeasurementService : Service(), SensorEventListener {
             val totalSteps = event.values[0]
             if (initialStepCount < 0) {
                 initialStepCount = totalSteps
+                return
             }
             val stepsSinceStart = totalSteps - initialStepCount
             Log.d(

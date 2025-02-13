@@ -55,7 +55,7 @@ fun StepCountSection(
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    text = "${stepRecord.distance}",
+                    text = String.format("%.2f", stepRecord.distance),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.alignByBaseline()
