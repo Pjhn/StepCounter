@@ -6,6 +6,7 @@ import com.example.stepcounterapp.features.common.model.StepRecord
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 class UserRecordRepository @Inject constructor(
     private val stepRecordDao: StepRecordDao
@@ -16,11 +17,13 @@ class UserRecordRepository @Inject constructor(
             val stepCount = it.stepCount
             val distance = it.stepCount * STEP_LENGTH
             val calories = it.stepCount * CALORIE_PER_STEP
+            val measurementTime = (it.stepCount * TIME_PER_STEP).seconds
 
             StepRecord(
                 stepCount = stepCount,
                 distance = distance,
-                calories = calories
+                calories = calories,
+                measurementTime = measurementTime
             )
         } ?: StepRecord()
     }
@@ -36,5 +39,6 @@ class UserRecordRepository @Inject constructor(
     companion object {
         private const val STEP_LENGTH = 0.8
         private const val CALORIE_PER_STEP = 1.0
+        private const val TIME_PER_STEP = 0.6
     }
 }
