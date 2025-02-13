@@ -15,7 +15,7 @@ sealed class ColorSet {
                 secondary = Color(0xFFE3EAFF),
                 tertiary = Color(0xFF4D61D7),
                 background = Color(0xFFFCFCFC),
-                surface = Color.DarkGray,
+                surface = Color(0xFFF5F5F5),
                 error = Color.Red,
                 onPrimary = Color(0xFFFCFCFC),
                 onSecondary = Color(0xFF363636),
@@ -24,11 +24,11 @@ sealed class ColorSet {
                 onError = Color.White,
                 outline = Color(0xFF363636)
             ),
-            brandColor = Color(0XFF4D61D7),
+            brandColor = Color(0XFFE44747),
             text= Color(0xFF363636),
             outlinedButton = Color(0XFFEFEFEF),
             divider = Color(0XFFEFEFEF),
-            pauseButton = Color(0XFF4D61D7)
+            pauseButton = Color(0XFFE44747)
         )
     }
 
