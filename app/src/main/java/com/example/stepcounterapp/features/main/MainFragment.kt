@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.features.main.presentation.output.MainUiEffect
 import com.example.stepcounterapp.features.main.presentation.screen.MainScreen
 import com.example.stepcounterapp.features.main.presentation.viewmodel.MainViewModel
@@ -42,6 +43,10 @@ class MainFragment : Fragment() {
         observeUiEffects()
         requestPermissions()
 
+        if (MeasurementService.isServiceRunning) {
+            viewModel.updateMainState(MainState.Measuring)
+        }
+
         return ComposeView(requireContext()).apply {
             setContent {
                 StepCounterAppTheme {
@@ -62,9 +67,9 @@ class MainFragment : Fragment() {
                     when (it) {
                         is MainUiEffect.StartMeasurement -> {
                             val intent = Intent(requireContext(), MeasurementService::class.java)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 requireContext().startForegroundService(intent)
-                            }else{
+                            } else {
                                 requireContext().startService(intent)
                             }
                         }
@@ -108,10 +113,11 @@ class MainFragment : Fragment() {
                 )
                 != PackageManager.PERMISSION_GRANTED
             ) {
-                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)            }
+                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
 
-        if (permissionsToRequest.isNotEmpty()){
+        if (permissionsToRequest.isNotEmpty()) {
             permissionLauncher.launch(permissionsToRequest.toTypedArray())
         }
     }

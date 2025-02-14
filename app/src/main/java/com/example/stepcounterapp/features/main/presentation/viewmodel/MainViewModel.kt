@@ -42,9 +42,15 @@ class MainViewModel @Inject constructor(
             initialValue = StepRecord()
         )
 
+    fun updateMainState(state: MainState) {
+        viewModelScope.launch {
+            _mainState.value = state
+        }
+    }
+
     override fun startMeasurement() {
         viewModelScope.launch {
-            _mainState.value = MainState.Measuring
+            updateMainState(MainState.Measuring)
             _mainUiEffect.emit(
                 MainUiEffect.StartMeasurement
             )
@@ -53,7 +59,7 @@ class MainViewModel @Inject constructor(
 
     override fun pauseMeasurement() {
         viewModelScope.launch {
-            _mainState.value = MainState.Main
+            updateMainState(MainState.Main)
             _mainUiEffect.emit(
                 MainUiEffect.PauseMeasurement
             )
