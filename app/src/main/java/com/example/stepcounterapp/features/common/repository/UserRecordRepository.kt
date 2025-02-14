@@ -43,8 +43,9 @@ class UserRecordRepository @Inject constructor(
     }
 
     override suspend fun saveUserRecord(record: StepRecord) {
+        val now = LocalDate.now()
         val entity = StepRecordEntity(
-            date = LocalDate.now(),
+            date = now,
             stepCount = record.stepCount ?: 0
         )
         stepRecordDao.upsert(entity)
