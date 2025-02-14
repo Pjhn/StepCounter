@@ -42,6 +42,12 @@ class MainViewModel @Inject constructor(
             initialValue = StepRecord()
         )
 
+    init {
+        viewModelScope.launch {
+            userRecordRepository.initializeTodayRecord()
+        }
+    }
+
     fun updateMainState(state: MainState) {
         viewModelScope.launch {
             _mainState.value = state

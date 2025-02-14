@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 interface IUserRecordRepository {
     val userRecord: Flow<StepRecord>
     suspend fun saveUserRecord(record: StepRecord)
+
+    suspend fun initializeTodayRecord()
 }
