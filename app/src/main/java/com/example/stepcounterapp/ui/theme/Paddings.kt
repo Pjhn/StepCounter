@@ -9,6 +9,7 @@ object Paddings {
     val medium = 8.dp
     val large = 12.dp
     val xlarge = 16.dp
+    val xxlarge = 24.dp
     val extra = 28.dp
     val xextra = 32.dp
 }

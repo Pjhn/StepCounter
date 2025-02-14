@@ -2,14 +2,14 @@
     <string name="app_name">StepCounterApp</string>
 
     <!-- Button Labels -->
-    <string name="view_records">기록보기</string>
-    <string name="start_measurement">측정시작</string>
-    <string name="pause">일시중지</string>
-    <string name="high_sensitivity">높음</string>
+    <string name="start">START</string>
+    <string name="pause">PAUSE</string>
+    <string name="high">High</string>
 
     <!-- UI Labels -->
     <string name="calories_unit">kcal</string>
-    <string name="sensor_sensitivity">센서 민감도</string>
-    <string name="steps">걸음</string>
+    <string name="sensitivity">Sensitivity</string>
+    <string name="steps">STEPS</string>
     <string name="distance_unit">m</string>
+    <string name="notification_body">Measuring steps</string>
 </resources>
