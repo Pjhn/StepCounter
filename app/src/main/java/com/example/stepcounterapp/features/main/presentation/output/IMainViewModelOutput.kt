@@ -9,7 +9,7 @@ interface IMainViewModelOutput {
 }
 
 sealed class MainUiEffect {
-    object OpenSensitivityDialog : MainUiEffect()
+    object OpenRecord : MainUiEffect()
 
     object StartMeasurement : MainUiEffect()
 

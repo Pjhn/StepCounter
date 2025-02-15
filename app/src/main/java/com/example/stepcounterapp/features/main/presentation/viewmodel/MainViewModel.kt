@@ -72,10 +72,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    override fun openSensitivityDialog() {
+    override fun openRecord() {
         viewModelScope.launch {
             _mainUiEffect.emit(
-                MainUiEffect.OpenSensitivityDialog
+                MainUiEffect.OpenRecord
             )
         }
     }
