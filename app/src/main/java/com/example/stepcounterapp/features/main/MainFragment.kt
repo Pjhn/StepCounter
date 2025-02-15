@@ -17,11 +17,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.features.main.presentation.output.MainUiEffect
 import com.example.stepcounterapp.features.main.presentation.screen.MainScreen
 import com.example.stepcounterapp.features.main.presentation.viewmodel.MainViewModel
 import com.example.stepcounterapp.features.main.service.MeasurementService
+import com.example.stepcounterapp.ui.navigation.safeNavigate
 import com.example.stepcounterapp.ui.theme.StepCounterAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -61,6 +63,7 @@ class MainFragment : Fragment() {
     }
 
     private fun observeUiEffects() {
+        val navController = findNavController()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.output.mainUiEffect.collectLatest {
@@ -79,10 +82,10 @@ class MainFragment : Fragment() {
                             requireContext().stopService(intent)
                         }
 
-                        is MainUiEffect.OpenSensitivityDialog -> {
-                            /**
-                             * 민감도 측정 다이얼 로그 호출
-                             * */
+                        is MainUiEffect.OpenRecord -> {
+                            navController.safeNavigate(
+                                MainFragmentDirections.actionMainToRecord()
+                            )
                         }
                     }
                 }

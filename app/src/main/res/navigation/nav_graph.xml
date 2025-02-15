@@ -7,10 +7,15 @@
     <fragment
         android:id="@+id/main_fragment"
         android:name="com.example.stepcounterapp.features.main.MainFragment"
-        android:label="Main"/>
+        android:label="Main">
+        <action
+            android:id="@+id/action_main_to_record"
+            app:destination="@id/record_fragment"
+            app:launchSingleTop="true"/>
+    </fragment>
 
     <fragment
-        android:id="@+id/info_fragment"
-        android:name="com.example.stepcounterapp.features.info.InfoFragment"
-        android:label="Info"/>
+        android:id="@+id/record_fragment"
+        android:name="com.example.stepcounterapp.features.record.RecordFragment"
+        android:label="Record"/>
 </navigation>
