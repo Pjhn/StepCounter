@@ -15,12 +15,14 @@ class UserRecordRepository @Inject constructor(
 
     override val userRecord = stepRecordDao.getLatestStepRecord().map { entity ->
         entity?.let {
+            val date = it.date
             val stepCount = it.stepCount
             val distance = it.stepCount * STEP_LENGTH
             val calories = it.stepCount * CALORIE_PER_STEP
             val measurementTime = (it.stepCount * TIME_PER_STEP).seconds
 
             StepRecord(
+                date = date,
                 stepCount = stepCount,
                 distance = distance,
                 calories = calories,
