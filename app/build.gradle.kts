@@ -56,6 +56,9 @@ dependencies {
     //android
     implementation(libs.androidx.appcompat)
 
+    //chart(graph)
+    implementation(libs.mpandroidchart)
+
     //room
     implementation(libs.room.runtime)
     kapt(libs.room.compiler)
