@@ -42,9 +42,21 @@ class MainViewModel @Inject constructor(
             initialValue = StepRecord()
         )
 
+    init {
+        viewModelScope.launch {
+            userRecordRepository.initializeTodayRecord()
+        }
+    }
+
+    fun updateMainState(state: MainState) {
+        viewModelScope.launch {
+            _mainState.value = state
+        }
+    }
+
     override fun startMeasurement() {
         viewModelScope.launch {
-            _mainState.value = MainState.Measuring
+            updateMainState(MainState.Measuring)
             _mainUiEffect.emit(
                 MainUiEffect.StartMeasurement
             )
@@ -53,17 +65,17 @@ class MainViewModel @Inject constructor(
 
     override fun pauseMeasurement() {
         viewModelScope.launch {
-            _mainState.value = MainState.Main
+            updateMainState(MainState.Main)
             _mainUiEffect.emit(
                 MainUiEffect.PauseMeasurement
             )
         }
     }
 
-    override fun openSensitivityDialog() {
+    override fun openRecord() {
         viewModelScope.launch {
             _mainUiEffect.emit(
-                MainUiEffect.OpenSensitivityDialog
+                MainUiEffect.OpenRecord
             )
         }
     }

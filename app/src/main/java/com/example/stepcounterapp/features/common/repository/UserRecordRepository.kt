@@ -3,6 +3,7 @@ package com.example.stepcounterapp.features.common.repository
 import com.example.stepcounterapp.features.common.database.dao.StepRecordDao
 import com.example.stepcounterapp.features.common.database.entity.StepRecordEntity
 import com.example.stepcounterapp.features.common.model.StepRecord
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import javax.inject.Inject
@@ -14,12 +15,14 @@ class UserRecordRepository @Inject constructor(
 
     override val userRecord = stepRecordDao.getLatestStepRecord().map { entity ->
         entity?.let {
+            val date = it.date
             val stepCount = it.stepCount
             val distance = it.stepCount * STEP_LENGTH
             val calories = it.stepCount * CALORIE_PER_STEP
             val measurementTime = (it.stepCount * TIME_PER_STEP).seconds
 
             StepRecord(
+                date = date,
                 stepCount = stepCount,
                 distance = distance,
                 calories = calories,
@@ -28,9 +31,23 @@ class UserRecordRepository @Inject constructor(
         } ?: StepRecord()
     }
 
+    override suspend fun initializeTodayRecord() {
+        val now = LocalDate.now()
+        val latestEntity = stepRecordDao.getLatestStepRecord().firstOrNull()
+
+        if (latestEntity == null || latestEntity.date < now){
+            val entity = StepRecordEntity(
+                date = now,
+                stepCount = 0
+            )
+            stepRecordDao.upsert(entity)
+        }
+    }
+
     override suspend fun saveUserRecord(record: StepRecord) {
+        val now = LocalDate.now()
         val entity = StepRecordEntity(
-            date = LocalDate.now(),
+            date = now,
             stepCount = record.stepCount ?: 0
         )
         stepRecordDao.upsert(entity)

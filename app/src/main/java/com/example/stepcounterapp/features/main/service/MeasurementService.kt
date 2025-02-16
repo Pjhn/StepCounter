@@ -39,6 +39,8 @@ class MeasurementService : Service(), SensorEventListener {
 
     override fun onCreate() {
         super.onCreate()
+        isServiceRunning = true
+
         stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
         if (stepCounterSensor != null) {
             sensorManager.registerListener(
@@ -84,6 +86,7 @@ class MeasurementService : Service(), SensorEventListener {
 
     override fun onDestroy() {
         sensorManager.unregisterListener(this)
+        isServiceRunning = false
         super.onDestroy()
     }
 
@@ -123,5 +126,6 @@ class MeasurementService : Service(), SensorEventListener {
         const val TAG = "MeasurementService"
         const val CHANNEL_ID = "measurement_channel"
         const val CHANNEL_NAME = "measurement Service"
+        var isServiceRunning = false
     }
 }

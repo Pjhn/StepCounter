@@ -17,10 +17,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.features.main.presentation.output.MainUiEffect
 import com.example.stepcounterapp.features.main.presentation.screen.MainScreen
 import com.example.stepcounterapp.features.main.presentation.viewmodel.MainViewModel
 import com.example.stepcounterapp.features.main.service.MeasurementService
+import com.example.stepcounterapp.ui.navigation.safeNavigate
 import com.example.stepcounterapp.ui.theme.StepCounterAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -42,6 +45,10 @@ class MainFragment : Fragment() {
         observeUiEffects()
         requestPermissions()
 
+        if (MeasurementService.isServiceRunning) {
+            viewModel.updateMainState(MainState.Measuring)
+        }
+
         return ComposeView(requireContext()).apply {
             setContent {
                 StepCounterAppTheme {
@@ -56,15 +63,16 @@ class MainFragment : Fragment() {
     }
 
     private fun observeUiEffects() {
+        val navController = findNavController()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.output.mainUiEffect.collectLatest {
                     when (it) {
                         is MainUiEffect.StartMeasurement -> {
                             val intent = Intent(requireContext(), MeasurementService::class.java)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 requireContext().startForegroundService(intent)
-                            }else{
+                            } else {
                                 requireContext().startService(intent)
                             }
                         }
@@ -74,10 +82,10 @@ class MainFragment : Fragment() {
                             requireContext().stopService(intent)
                         }
 
-                        is MainUiEffect.OpenSensitivityDialog -> {
-                            /**
-                             * 민감도 측정 다이얼 로그 호출
-                             * */
+                        is MainUiEffect.OpenRecord -> {
+                            navController.safeNavigate(
+                                MainFragmentDirections.actionMainToRecord()
+                            )
                         }
                     }
                 }
@@ -108,10 +116,11 @@ class MainFragment : Fragment() {
                 )
                 != PackageManager.PERMISSION_GRANTED
             ) {
-                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)            }
+                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+            }
         }
 
-        if (permissionsToRequest.isNotEmpty()){
+        if (permissionsToRequest.isNotEmpty()) {
             permissionLauncher.launch(permissionsToRequest.toTypedArray())
         }
     }

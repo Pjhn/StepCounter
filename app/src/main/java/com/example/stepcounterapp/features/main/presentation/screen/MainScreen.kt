@@ -39,11 +39,11 @@ fun MainScreen(
                 date = currentDate,
                 button = {
                     CustomIconButton(
-                        onClick = { input.openSensitivityDialog() },
+                        onClick = { input.openRecord() },
                         icon = {
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_chart),
-                                contentDescription = "정보 아이콘"
+                                contentDescription = "record"
                             )
                         }
                     )
