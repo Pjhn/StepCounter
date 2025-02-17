@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RecordFragment: Fragment() {
+class RecordFragment : Fragment() {
 
     private val viewModel: RecordViewModel by viewModels()
 
@@ -37,7 +37,10 @@ class RecordFragment: Fragment() {
                 StepCounterAppTheme {
                     RecordScreen(
                         recordStateHolder = viewModel.output.recordState.collectAsState(),
-                        input = viewModel.input
+                        selectedCategory = viewModel.selectedCategory.collectAsState(),
+                        selectedDuration = viewModel.selectedDuration.collectAsState(),
+                        chartRecords = viewModel.chartRecords.collectAsState(),
+                        input = viewModel.input,
                     )
                 }
             }
