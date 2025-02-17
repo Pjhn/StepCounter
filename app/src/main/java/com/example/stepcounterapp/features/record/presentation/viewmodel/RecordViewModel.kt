@@ -2,6 +2,7 @@ package com.example.stepcounterapp.features.record.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.common.model.enums.Duration
 import com.example.stepcounterapp.features.common.model.enums.Duration.*
 import com.example.stepcounterapp.features.common.repository.UserRecordRepository
@@ -17,11 +18,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class RecordViewModel @Inject constructor(
-    private val userRecordRepository: UserRecordRepository
+    private val repository: UserRecordRepository
 ) : ViewModel(), IRecordViewModelInput, IRecordViewModelOutput {
 
     val output: IRecordViewModelOutput = this
@@ -43,6 +45,17 @@ class RecordViewModel @Inject constructor(
     private val _selectedDuration = MutableStateFlow<Duration>(WEEK)
     val selectedDuration: StateFlow<Duration>
         get() = _selectedDuration
+
+    private val _chartRecords = MutableStateFlow<List<StepRecord>>(emptyList())
+    val chartRecords: StateFlow<List<StepRecord>> = _chartRecords
+
+    init {
+        viewModelScope.launch {
+            val today = LocalDate.now()
+            val oneYearAgo = today.minusYears(1)
+            _chartRecords.value = repository.getRecordsForPeriod(oneYearAgo, today)
+        }
+    }
 
     override fun goBackToMain() {
         viewModelScope.launch {

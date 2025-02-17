@@ -22,23 +22,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.stepcounterapp.features.record.domain.enums.RecordCategories
 import com.example.stepcounterapp.features.record.domain.enums.RecordCategories.*
+import com.example.stepcounterapp.features.record.presentation.input.IRecordViewModelInput
+import com.example.stepcounterapp.ui.theme.Paddings
 import com.example.stepcounterapp.ui.theme.colors
 
+private val CATEGORY_SECTION_PADDING_HORIZONTAL = Paddings.xlarge
+private val CATEGORY_SECTION_SPACED_BY = Paddings.xxlarge
+
 @Composable
-fun CategoryBar(
+fun CategorySection(
     selectedCategory: RecordCategories,
+    input: IRecordViewModelInput
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(24.dp,  Alignment.CenterHorizontally)
+            .padding(CATEGORY_SECTION_PADDING_HORIZONTAL),
+        horizontalArrangement = Arrangement.spacedBy(
+            CATEGORY_SECTION_SPACED_BY,
+            Alignment.CenterHorizontally
+        )
     ) {
         entries.forEach { category ->
             CategoryBox(
                 category = category,
                 isSelected = category == selectedCategory,
-                onClick = { })
+                onClick = { input.selectCategory(category) })
         }
     }
 }

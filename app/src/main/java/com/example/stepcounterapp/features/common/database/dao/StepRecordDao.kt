@@ -1,12 +1,11 @@
 package com.example.stepcounterapp.features.common.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.stepcounterapp.features.common.database.entity.StepRecordEntity
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface StepRecordDao {
@@ -15,4 +14,7 @@ interface StepRecordDao {
 
     @Query("SELECT * FROM step_record ORDER BY date DESC LIMIT 1")
     fun getLatestStepRecord(): Flow<StepRecordEntity?>
+
+    @Query("SELECT * FROM step_record WHERE date BETWEEN :startDate AND :endDate GROUP BY date ORDER BY date ASC")
+    suspend fun getStepRecords(startDate: LocalDate, endDate: LocalDate): List<StepRecordEntity>?
 }

@@ -2,6 +2,7 @@ package com.example.stepcounterapp.ui.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
+import com.github.mikephil.charting.model.GradientColor
 
 data class CustomColors (
     val material: ColorScheme,
@@ -14,7 +15,9 @@ data class CustomColors (
     val outlinedButton: Color = Color.Black,
     val divider: Color = Color.DarkGray,
     val pauseButton: Color = Color.Blue,
-    val brandColor: Color = Color.Blue
+    val brandColor: Color = Color.Blue,
+    val defaultTextButton: Color = Color.DarkGray,
+    val selectedTextButtonBackground: Color = Color.LightGray,
 ) {
     val primary: Color get() = material.primary
     val onPrimary: Color get() = material.onPrimary

@@ -3,6 +3,7 @@ package com.example.stepcounterapp.ui.theme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
+import com.github.mikephil.charting.model.GradientColor
 
 sealed class ColorSet {
     open lateinit var lightColors: CustomColors
@@ -28,7 +29,9 @@ sealed class ColorSet {
             text= Color(0xFF363636),
             outlinedButton = Color(0XFFEFEFEF),
             divider = Color(0XFFEFEFEF),
-            pauseButton = Color(0XFFE44747)
+            pauseButton = Color(0XFFE44747),
+            defaultTextButton = Color(0xFF868686),
+            selectedTextButtonBackground = Color(0xFFF5F5F5),
         )
     }
 

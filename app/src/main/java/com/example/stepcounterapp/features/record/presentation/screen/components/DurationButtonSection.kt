@@ -17,27 +17,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.example.stepcounterapp.features.common.model.enums.Duration
+import com.example.stepcounterapp.features.record.presentation.input.IRecordViewModelInput
 import com.example.stepcounterapp.ui.theme.Paddings
 import com.example.stepcounterapp.ui.theme.colors
 
+private val DURATION_SECTION_PADDING_HORIZONTAL = Paddings.xxlarge
+private val DURATION_SECTION_SPACED_BY = Paddings.xlarge
 
 @Composable
-fun DurationBar(
+fun DurationButtonSection(
     selectedDuration: Duration,
+    input: IRecordViewModelInput
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(horizontal = DURATION_SECTION_PADDING_HORIZONTAL),
+        horizontalArrangement = Arrangement.spacedBy(DURATION_SECTION_SPACED_BY)
     ) {
         Duration.entries.forEach { duration ->
             DurationButton(
                 duration = duration,
                 isSelected = duration == selectedDuration,
-                onClick = { })
+                onClick = { input.selectDuration(duration) })
         }
     }
 }
@@ -48,7 +51,8 @@ fun DurationButton(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (isSelected) MaterialTheme.colors.selectedTextButtonBackground else Color.Transparent
+    val backgroundColor =
+        if (isSelected) MaterialTheme.colors.selectedTextButtonBackground else Color.Transparent
     val contentColor = MaterialTheme.colors.text
 
     Box(
@@ -58,8 +62,10 @@ fun DurationButton(
                 MutableInteractionSource()
             }) { onClick() }
             .background(backgroundColor, shape = MaterialTheme.shapes.medium)
-            .padding(horizontal = Paddings.large,
-                vertical = Paddings.medium),
+            .padding(
+                horizontal = Paddings.large,
+                vertical = Paddings.medium
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(
