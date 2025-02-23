@@ -17,6 +17,7 @@ import com.example.stepcounterapp.features.record.presentation.screen.components
 import com.example.stepcounterapp.features.record.presentation.screen.components.ChartSection
 import com.example.stepcounterapp.features.record.presentation.screen.components.DurationButtonSection
 import com.example.stepcounterapp.features.record.presentation.screen.components.RecordTopAppBar
+import com.example.stepcounterapp.features.record.presentation.screen.components.TotalSection
 import com.example.stepcounterapp.ui.theme.Paddings
 
 
@@ -42,17 +43,22 @@ fun RecordScreen(
                 selectedCategory = selectedCategory.value,
                 input = input
             )
-            Spacer(modifier = Modifier.padding(Paddings.small))
+            Spacer(modifier = Modifier.padding(Paddings.medium))
             DurationButtonSection(
                 selectedDuration = selectedDuration.value,
                 input = input
             )
-            Spacer(modifier = Modifier.padding(Paddings.small))
+            Spacer(modifier = Modifier.padding(Paddings.medium))
             ChartSection(
-                modifier = Modifier.padding(Paddings.xlarge),
+                modifier = Modifier.padding(horizontal = Paddings.xxlarge),
                 selectedCategory = selectedCategory.value,
                 selectedDuration = selectedDuration.value,
                 records = chartRecords.value
+            )
+            Spacer(modifier = Modifier.padding(Paddings.large))
+            TotalSection(
+                modifier = Modifier.padding(horizontal = Paddings.xxlarge),
+                records = chartRecords.value, selectedDuration = selectedDuration.value
             )
         }
     }
