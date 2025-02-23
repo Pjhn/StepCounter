@@ -2,14 +2,14 @@ package com.example.stepcounterapp.features.record.domain.enums
 
 enum class RecordCategories {
     STEP,
-    DURATION,
+    TIME,
     CALORIES,
     DISTANCE;
 
     override fun toString(): String {
         return when (this) {
             STEP -> "Steps"
-            DURATION -> "Duration"
+            TIME -> "Time"
             CALORIES -> "Calories"
             DISTANCE -> "Distance"
         }

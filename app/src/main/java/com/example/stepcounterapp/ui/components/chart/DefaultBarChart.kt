@@ -64,6 +64,8 @@ private fun BarChart.configureChart(xLabels: List<String>) {
         setGridColor(Color.parseColor("#80CCCCCC"))
         setGridLineWidth(0.5f)
         setDrawAxisLine(false)
+        axisMinimum = 0f
+        setLabelCount(4, true)
     }
     axisRight.isEnabled = false
 
@@ -79,5 +81,5 @@ private fun createBarData(yValues: List<Float>): BarData {
         setGradientColor(0xFFEC8F3D.toInt(), 0xFFE44747.toInt())
         setDrawValues(false)
     }
-    return BarData(dataSet).apply { barWidth = 0.9f }
+    return BarData(dataSet).apply { barWidth = 0.6f }
 }

@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.common.model.enums.Duration
 import com.example.stepcounterapp.features.common.model.enums.Duration.*
-import com.example.stepcounterapp.features.common.repository.UserRecordRepository
 import com.example.stepcounterapp.features.record.domain.enums.RecordCategories
 import com.example.stepcounterapp.features.record.domain.enums.RecordCategories.*
+import com.example.stepcounterapp.features.record.domain.usecase.GetRecordsForPeriodUseCase
 import com.example.stepcounterapp.features.record.presentation.input.IRecordViewModelInput
 import com.example.stepcounterapp.features.record.presentation.output.IRecordViewModelOutput
 import com.example.stepcounterapp.features.record.presentation.output.RecordState
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecordViewModel @Inject constructor(
-    private val repository: UserRecordRepository
+    private val getRecordsForPeriodUseCase: GetRecordsForPeriodUseCase
 ) : ViewModel(), IRecordViewModelInput, IRecordViewModelOutput {
 
     val output: IRecordViewModelOutput = this
@@ -53,7 +53,7 @@ class RecordViewModel @Inject constructor(
         viewModelScope.launch {
             val today = LocalDate.now()
             val oneYearAgo = today.minusYears(1)
-            _chartRecords.value = repository.getRecordsForPeriod(oneYearAgo, today)
+            _chartRecords.value = getRecordsForPeriodUseCase(oneYearAgo, today)
         }
     }
 
