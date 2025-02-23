@@ -7,6 +7,7 @@ import com.example.stepcounterapp.features.record.domain.enums.RecordCategories
 import com.example.stepcounterapp.ui.components.chart.DefaultBarChart
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun YearlyBarChart(
@@ -34,15 +35,15 @@ fun YearlyBarChart(
                 RecordCategories.STEP -> (record.stepCount ?: 0).toDouble()
                 RecordCategories.CALORIES -> record.calories ?: 0.0
                 RecordCategories.DISTANCE -> record.distance ?: 0.0
-                RecordCategories.DURATION -> record.measurementTime?.inWholeSeconds?.toDouble()
+                RecordCategories.TIME -> record.measurementTime?.inWholeSeconds?.toDouble()
                     ?: 0.0
             }
         }.toFloat()
     }
 
-    val formatter = DateTimeFormatter.ofPattern("MM/yyyy")
+    val formatter = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)
     val xLabels =
-        monthStarts.map { it.format(formatter) }.toMutableList().also { it[0] = "This Month" }
+        monthStarts.map { it.format(formatter) }
     val yValues = monthStarts.map { monthlyData[it] ?: 0f }
 
 

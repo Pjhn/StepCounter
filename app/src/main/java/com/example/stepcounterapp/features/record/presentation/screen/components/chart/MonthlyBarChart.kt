@@ -17,14 +17,13 @@ fun MonthlyBarChart(
     records: List<StepRecord>
 ) {
     val currentWeekStart = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-    val previousWeeks = (1..3)
+    val previousWeeks = (0..3)
         .map { currentWeekStart.minusWeeks(it.toLong()) }
         .sorted()
-    val weekStarts = listOf(currentWeekStart) + previousWeeks
 
     val formatter = DateTimeFormatter.ofPattern("MM/dd")
     val xLabels =
-        weekStarts.map { it.format(formatter) }.toMutableList().also { it[0] = "This Week" }
+        previousWeeks.map { it.format(formatter) }
 
     val weeklyData = records.filter { it.date != null }
         .groupBy { record ->
@@ -36,13 +35,13 @@ fun MonthlyBarChart(
                     RecordCategories.STEP -> (record.stepCount ?: 0).toDouble()
                     RecordCategories.CALORIES -> record.calories ?: 0.0
                     RecordCategories.DISTANCE -> record.distance ?: 0.0
-                    RecordCategories.DURATION -> record.measurementTime?.inWholeSeconds?.toDouble()
+                    RecordCategories.TIME -> record.measurementTime?.inWholeSeconds?.toDouble()
                         ?: 0.0
                 }
             }.toFloat()
         }
 
-    val yValues = weekStarts.map { weeklyData[it] ?: 0f }
+    val yValues = previousWeeks.map { weeklyData[it] ?: 0f }
 
     DefaultBarChart(
         modifier = modifier,
