@@ -26,8 +26,8 @@ import com.example.stepcounterapp.features.record.presentation.input.IRecordView
 import com.example.stepcounterapp.ui.theme.Paddings
 import com.example.stepcounterapp.ui.theme.colors
 
-private val CATEGORY_SECTION_PADDING_HORIZONTAL = Paddings.xlarge
-private val CATEGORY_SECTION_SPACED_BY = Paddings.xxlarge
+private val CATEGORY_SECTION_PADDING_HORIZONTAL = Paddings.medium
+private val CATEGORY_SECTION_SPACED_BY = Paddings.extra
 
 @Composable
 fun CategorySection(
@@ -37,7 +37,7 @@ fun CategorySection(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(CATEGORY_SECTION_PADDING_HORIZONTAL),
+            .padding(horizontal = CATEGORY_SECTION_PADDING_HORIZONTAL),
         horizontalArrangement = Arrangement.spacedBy(
             CATEGORY_SECTION_SPACED_BY,
             Alignment.CenterHorizontally
