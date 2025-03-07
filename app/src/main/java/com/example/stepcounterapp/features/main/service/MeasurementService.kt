@@ -5,6 +5,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
@@ -15,15 +17,21 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.glance.appwidget.updateAll
 import com.example.stepcounterapp.MainActivity
 import com.example.stepcounterapp.R
 import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.common.repository.IUserRecordRepository
+import com.example.stepcounterapp.features.widget.StepCountWidget
+import com.example.stepcounterapp.features.widget.StepCountWidgetReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val WIDGET_UPDATE_DELAY: Long = 6000
 
 @AndroidEntryPoint
 class MeasurementService : Service(), SensorEventListener {
@@ -52,7 +60,15 @@ class MeasurementService : Service(), SensorEventListener {
             Log.e(TAG, "센서를 찾을 수 없습니다.")
         }
 
+        pinWidget()
         startForegroundService()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            while (isServiceRunning) {
+                StepCountWidget.updateAll(this@MeasurementService)
+                delay(WIDGET_UPDATE_DELAY)
+            }
+        }
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -121,6 +137,19 @@ class MeasurementService : Service(), SensorEventListener {
 
         startForeground(1, notification)
     }
+
+    private fun pinWidget() {
+        val widgetManager = AppWidgetManager.getInstance(this)
+        val widgetComponent = ComponentName(this, StepCountWidgetReceiver::class.java)
+        val widgetIds = widgetManager.getAppWidgetIds(widgetComponent)
+
+        if (widgetIds.isNotEmpty()) {
+            return
+        }
+
+        widgetManager.requestPinAppWidget(widgetComponent, null, null)
+    }
+
 
     companion object {
         const val TAG = "MeasurementService"
