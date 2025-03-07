@@ -56,6 +56,10 @@ dependencies {
     //android
     implementation(libs.androidx.appcompat)
 
+    //glance
+    implementation(libs.glance.appwidget)
+    implementation(libs.glance.material3)
+
     //chart(graph)
     implementation(libs.mpandroidchart)
 
