@@ -93,7 +93,7 @@ private fun CaloriesRow(
         }
         Spacer(modifier = Modifier.padding(Paddings.small))
         Text(
-            text = stepRecord.calories.toString(),
+            text = String.format("%.2f", stepRecord.calories),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline,
         )
