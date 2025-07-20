@@ -28,7 +28,7 @@ fun WeeklyBarChart(
             when (selectedCategory) {
                 RecordCategories.STEP -> record?.stepCount?.toFloat() ?: 0f
                 RecordCategories.CALORIES -> record?.calories?.toFloat() ?: 0f
-                RecordCategories.DISTANCE -> record?.distance?.toFloat() ?: 0f
+                RecordCategories.DISTANCE -> (record?.distance?.toFloat() ?: 0f)/1000
                 RecordCategories.TIME -> record?.measurementTime?.inWholeSeconds?.toFloat()
                     ?: 0f
             }
