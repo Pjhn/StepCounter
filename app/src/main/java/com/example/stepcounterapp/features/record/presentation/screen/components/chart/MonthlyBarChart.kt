@@ -34,7 +34,7 @@ fun MonthlyBarChart(
                 when (selectedCategory) {
                     RecordCategories.STEP -> (record.stepCount ?: 0).toDouble()
                     RecordCategories.CALORIES -> record.calories ?: 0.0
-                    RecordCategories.DISTANCE -> record.distance ?: 0.0
+                    RecordCategories.DISTANCE -> (record.distance ?: 0.0)/1000.0
                     RecordCategories.TIME -> record.measurementTime?.inWholeSeconds?.toDouble()
                         ?: 0.0
                 }
