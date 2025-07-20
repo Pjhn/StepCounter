@@ -13,7 +13,7 @@ hilt = "2.48.1"
 appcompat = "1.7.0"
 room = "2.6.1"
 mpandroidchart = "3.1.0"
-glance = "1.1.0"
+glance = "1.1.1"
 
 [libraries]
 glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance"}
