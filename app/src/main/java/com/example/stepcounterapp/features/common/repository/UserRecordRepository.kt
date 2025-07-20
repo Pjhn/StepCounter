@@ -7,6 +7,7 @@ import com.example.stepcounterapp.features.common.model.StepRecord
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 class UserRecordRepository @Inject constructor(
@@ -20,8 +21,9 @@ class UserRecordRepository @Inject constructor(
     override suspend fun initializeTodayRecord() {
         val now = LocalDate.now()
         val latestEntity = stepRecordDao.getLatestStepRecord().firstOrNull()
+        val daysGap = ChronoUnit.DAYS.between(latestEntity?.date, now)
 
-        if (latestEntity == null || latestEntity.date < now) {
+        if (latestEntity == null || daysGap >= 1) {
             val entity = StepRecordEntity(
                 date = now,
                 stepCount = 0

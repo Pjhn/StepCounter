@@ -1,10 +1,13 @@
 package com.example.stepcounterapp.features.main.service
 
+import StepCountWidget
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
@@ -15,16 +18,26 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.datastore.preferences.core.MutablePreferences
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.state.updateAppWidgetState
+import androidx.glance.appwidget.updateAll
 import com.example.stepcounterapp.MainActivity
 import com.example.stepcounterapp.R
 import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.common.repository.IUserRecordRepository
+import com.example.stepcounterapp.features.widget.StepCountWidgetReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(FlowPreview::class)
 @AndroidEntryPoint
 class MeasurementService : Service(), SensorEventListener {
     @Inject
@@ -35,12 +48,33 @@ class MeasurementService : Service(), SensorEventListener {
 
     private var stepCounterSensor: Sensor? = null
 
-    private var initialStepCount: Float = -1f
+    private var prevStepCount: Float = -1f
+
+    private val stepFlow = MutableStateFlow(0)
 
     override fun onCreate() {
         super.onCreate()
         isServiceRunning = true
 
+        CoroutineScope(Dispatchers.IO).launch {
+            userRecordRepository.userRecord.firstOrNull()?.let {
+                stepFlow.value = it.stepCount ?: 0
+            }
+
+            stepFlow
+                .sample(1000)
+                .collect{steps ->
+                    userRecordRepository.saveUserRecord(StepRecord(stepCount = steps))
+                    updateWidget(this@MeasurementService, steps)
+                }
+        }
+
+        registerSensor()
+        pinWidget()
+        startForegroundService()
+    }
+
+    private fun registerSensor(){
         stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
         if (stepCounterSensor != null) {
             sensorManager.registerListener(
@@ -51,29 +85,37 @@ class MeasurementService : Service(), SensorEventListener {
         } else {
             Log.e(TAG, "센서를 찾을 수 없습니다.")
         }
+    }
+    private suspend fun updateWidget(context: Context, steps: Int){
+        val manager = GlanceAppWidgetManager(context)
+        val ids = manager.getGlanceIds(StepCountWidget::class.java)
 
-        startForegroundService()
+        ids.forEach { id ->
+            updateAppWidgetState(
+                context = context,
+                glanceId = id
+            ){ prefs: MutablePreferences ->
+                prefs[StepCountWidget.TODAY_STEPS] = steps
+            }
+        }
+        StepCountWidget.updateAll(this@MeasurementService)
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_STEP_COUNTER) {
             val totalSteps = event.values[0]
-            if (initialStepCount < 0) {
-                initialStepCount = totalSteps
+            if (prevStepCount < 0) {
+                prevStepCount = totalSteps
                 return
             }
-            val stepsSinceStart = totalSteps - initialStepCount
+            val stepsSinceStart = (totalSteps - prevStepCount).toInt()
             Log.d(
                 TAG, "걸음 수: $stepsSinceStart, " +
-                        "totalSteps: $totalSteps, initialStepCount: $initialStepCount"
+                        "totalSteps: $totalSteps, prevStepCount: $prevStepCount"
             )
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val record = StepRecord(
-                    stepCount = stepsSinceStart.toInt()
-                )
-                userRecordRepository.saveUserRecord(record)
-            }
+            stepFlow.value += stepsSinceStart
+            prevStepCount = totalSteps
         }
     }
 
@@ -121,6 +163,19 @@ class MeasurementService : Service(), SensorEventListener {
 
         startForeground(1, notification)
     }
+
+    private fun pinWidget() {
+        val widgetManager = AppWidgetManager.getInstance(this)
+        val widgetComponent = ComponentName(this, StepCountWidgetReceiver::class.java)
+        val widgetIds = widgetManager.getAppWidgetIds(widgetComponent)
+
+        if (widgetIds.isNotEmpty()) {
+            return
+        }
+
+        widgetManager.requestPinAppWidget(widgetComponent, null, null)
+    }
+
 
     companion object {
         const val TAG = "MeasurementService"

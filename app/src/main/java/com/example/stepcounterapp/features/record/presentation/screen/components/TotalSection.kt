@@ -131,7 +131,7 @@ fun IconRow(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline
         )
-        Spacer(modifier = Modifier.padding(Paddings.large))
+        Spacer(modifier = Modifier.padding(Paddings.small))
     }
 }
 
