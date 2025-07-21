@@ -20,6 +20,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.features.main.presentation.output.MainUiEffect
+import com.example.stepcounterapp.features.main.presentation.output.SensorState
 import com.example.stepcounterapp.features.main.presentation.screen.MainScreen
 import com.example.stepcounterapp.features.main.presentation.viewmodel.MainViewModel
 import com.example.stepcounterapp.features.main.service.MeasurementService
@@ -54,6 +55,7 @@ class MainFragment : Fragment() {
                 StepCounterAppTheme {
                     MainScreen(
                         mainStateHolder = viewModel.mainState.collectAsState(),
+                        sensorStateHolder = viewModel.sensorState.collectAsState(),
                         input = viewModel.input,
                         stepRecord = viewModel.stepRecord.collectAsState()
                     )
@@ -86,6 +88,10 @@ class MainFragment : Fragment() {
                             navController.safeNavigate(
                                 MainFragmentDirections.actionMainToRecord()
                             )
+                        }
+
+                        is MainUiEffect.UpdateSensorDelay -> {
+                            updateSensorState()
                         }
                     }
                 }
@@ -123,5 +129,9 @@ class MainFragment : Fragment() {
         if (permissionsToRequest.isNotEmpty()) {
             permissionLauncher.launch(permissionsToRequest.toTypedArray())
         }
+    }
+
+    private fun updateSensorState(){
+        viewModel.updateSensorState()
     }
 }

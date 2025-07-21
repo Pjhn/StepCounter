@@ -6,4 +6,6 @@ interface IMainViewModelInput {
     fun startMeasurement()
 
     fun pauseMeasurement()
+
+    fun updateSensorDelay()
 }
