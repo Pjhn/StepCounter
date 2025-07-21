@@ -71,17 +71,15 @@ class MainFragment : Fragment() {
                 viewModel.output.mainUiEffect.collectLatest {
                     when (it) {
                         is MainUiEffect.StartMeasurement -> {
-                            val intent = Intent(requireContext(), MeasurementService::class.java)
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                requireContext().startForegroundService(intent)
+                                requireContext().startForegroundService(sensorIntent())
                             } else {
-                                requireContext().startService(intent)
+                                requireContext().startService(sensorIntent())
                             }
                         }
 
                         is MainUiEffect.PauseMeasurement -> {
-                            val intent = Intent(requireContext(), MeasurementService::class.java)
-                            requireContext().stopService(intent)
+                            requireContext().stopService(sensorIntent())
                         }
 
                         is MainUiEffect.OpenRecord -> {
@@ -92,6 +90,10 @@ class MainFragment : Fragment() {
 
                         is MainUiEffect.UpdateSensorDelay -> {
                             updateSensorState()
+
+                            if(MeasurementService.isServiceRunning){
+                                requireContext().startService(sensorIntent())
+                            }
                         }
                     }
                 }
@@ -133,5 +135,14 @@ class MainFragment : Fragment() {
 
     private fun updateSensorState(){
         viewModel.updateSensorState()
+    }
+
+    private fun sensorIntent(): Intent{
+        return Intent(requireContext(), MeasurementService::class.java).apply {
+            action = when (viewModel.sensorState.value){
+                SensorState.DelayLow -> MeasurementService.SENSOR_DELAY_LOW
+                SensorState.DelayHigh -> MeasurementService.SENSOR_DELAY_HIGH
+            }
+        }
     }
 }
