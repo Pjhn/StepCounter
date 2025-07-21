@@ -52,6 +52,21 @@ class MeasurementService : Service(), SensorEventListener {
 
     private val stepFlow = MutableStateFlow(0)
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action){
+            SENSOR_DELAY_HIGH -> applySensorDelay(SensorManager.SENSOR_DELAY_UI)
+            SENSOR_DELAY_LOW -> applySensorDelay(SensorManager.SENSOR_DELAY_NORMAL)
+        }
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun applySensorDelay(state: Int){
+        sensorManager.unregisterListener(this)
+        stepCounterSensor?.let {
+            sensorManager.registerListener(this, it, state)
+        } ?: registerSensor(state)
+    }
+
     override fun onCreate() {
         super.onCreate()
         isServiceRunning = true
@@ -69,23 +84,23 @@ class MeasurementService : Service(), SensorEventListener {
                 }
         }
 
-        registerSensor()
         pinWidget()
         startForegroundService()
     }
 
-    private fun registerSensor(){
+    private fun registerSensor(state: Int){
         stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
         if (stepCounterSensor != null) {
             sensorManager.registerListener(
                 this,
                 stepCounterSensor,
-                SensorManager.SENSOR_DELAY_NORMAL
+                state
             )
         } else {
             Log.e(TAG, "센서를 찾을 수 없습니다.")
         }
     }
+
     private suspend fun updateWidget(context: Context, steps: Int){
         val manager = GlanceAppWidgetManager(context)
         val ids = manager.getGlanceIds(StepCountWidget::class.java)
@@ -181,6 +196,8 @@ class MeasurementService : Service(), SensorEventListener {
         const val TAG = "MeasurementService"
         const val CHANNEL_ID = "measurement_channel"
         const val CHANNEL_NAME = "measurement Service"
+        const val SENSOR_DELAY_LOW = "SENSOR_DELAY_LOW"
+        const val SENSOR_DELAY_HIGH = "SENSOR_DELAY_HIGH"
         var isServiceRunning = false
     }
 }

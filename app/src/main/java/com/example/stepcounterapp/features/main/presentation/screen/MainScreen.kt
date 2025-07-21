@@ -15,6 +15,7 @@ import com.example.stepcounterapp.R
 import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.main.presentation.input.IMainViewModelInput
 import com.example.stepcounterapp.features.main.presentation.output.MainState
+import com.example.stepcounterapp.features.main.presentation.output.SensorState
 import com.example.stepcounterapp.features.main.presentation.screen.components.MainTopAppBar
 import com.example.stepcounterapp.features.main.presentation.screen.components.PrimaryButtonSection
 import com.example.stepcounterapp.features.main.presentation.screen.components.RecordDetailSection
@@ -26,6 +27,7 @@ import java.time.LocalDateTime
 @Composable
 fun MainScreen(
     mainStateHolder: State<MainState>,
+    sensorStateHolder: State<SensorState>,
     input: IMainViewModelInput,
     stepRecord: State<StepRecord>
 ) {
@@ -60,12 +62,16 @@ fun MainScreen(
                 mainStateHolder = mainStateHolder,
                 stepRecord = stepRecord.value
             )
+
             StepCountSection(
                 stepRecord = stepRecord.value,
                 modifier = Modifier.weight(1f)
             )
 
-            SensorButtonSection()
+            SensorButtonSection(
+                sensorStateHolder = sensorStateHolder,
+                input = input
+            )
 
             PrimaryButtonSection(
                 mainStateHolder = mainStateHolder,

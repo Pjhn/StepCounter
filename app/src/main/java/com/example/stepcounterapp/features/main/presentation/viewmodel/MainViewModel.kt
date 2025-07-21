@@ -8,6 +8,7 @@ import com.example.stepcounterapp.features.main.presentation.input.IMainViewMode
 import com.example.stepcounterapp.features.main.presentation.output.IMainViewModelOutput
 import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.features.main.presentation.output.MainUiEffect
+import com.example.stepcounterapp.features.main.presentation.output.SensorState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,6 +32,11 @@ class MainViewModel @Inject constructor(
         MutableStateFlow(MainState.Loading)
     override val mainState: StateFlow<MainState>
         get() = _mainState
+
+    private val _sensorState: MutableStateFlow<SensorState> =
+        MutableStateFlow(SensorState.DelayLow)
+    override val sensorState: StateFlow<SensorState>
+        get() = _sensorState
 
     private val _mainUiEffect = MutableSharedFlow<MainUiEffect>()
     override val mainUiEffect: SharedFlow<MainUiEffect>
@@ -50,7 +57,18 @@ class MainViewModel @Inject constructor(
 
     fun updateMainState(state: MainState) {
         viewModelScope.launch {
-            _mainState.value = state
+            _mainState.update { state }
+        }
+    }
+
+    fun updateSensorState() {
+        viewModelScope.launch {
+            _sensorState.update { current ->
+                when (current){
+                    SensorState.DelayHigh -> SensorState.DelayLow
+                    SensorState.DelayLow -> SensorState.DelayHigh
+                }
+            }
         }
     }
 
@@ -76,6 +94,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _mainUiEffect.emit(
                 MainUiEffect.OpenRecord
+            )
+        }
+    }
+
+    override fun updateSensorDelay() {
+        viewModelScope.launch {
+            _mainUiEffect.emit(
+                MainUiEffect.UpdateSensorDelay
             )
         }
     }

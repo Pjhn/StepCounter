@@ -5,10 +5,11 @@
     <string name="start">START</string>
     <string name="pause">PAUSE</string>
     <string name="high">High</string>
+    <string name="low">Low</string>
 
     <!-- UI Labels -->
     <string name="calories_unit">kcal</string>
-    <string name="sensitivity">Sensitivity</string>
+    <string name="sensor_delay">Sensor Delay</string>
     <string name="steps">STEPS</string>
     <string name="distance_unit">m</string>
     <string name="notification_body">Measuring steps</string>
