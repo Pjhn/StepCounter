@@ -66,8 +66,8 @@ class MainFragment : Fragment() {
 
     private fun observeUiEffects() {
         val navController = findNavController()
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.output.mainUiEffect.collectLatest {
                     when (it) {
                         is MainUiEffect.StartMeasurement -> {
