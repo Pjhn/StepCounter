@@ -26,8 +26,7 @@
 
 
 ## Library
-- **MPAndroidChart**  
-  Copyright (C) 2018 PhilJay  
+- **MPAndroidChart**   (Copyright (C) 2018 PhilJay  
   Licensed under the Apache License, Version 2.0  
-  https://github.com/PhilJay/MPAndroidChart
+  https://github.com/PhilJay/MPAndroidChart)
 
