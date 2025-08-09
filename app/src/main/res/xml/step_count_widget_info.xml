@@ -3,6 +3,7 @@
     android:minWidth="100dp"
     android:minHeight="40dp"
     android:initialLayout="@layout/glance_default_loading_layout"
+    android:previewImage="@drawable/img_widget_preivew"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen">
 </appwidget-provider>

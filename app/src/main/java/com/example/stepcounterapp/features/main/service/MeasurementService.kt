@@ -77,7 +77,6 @@ class MeasurementService : Service(), SensorEventListener {
             }
 
             stepFlow
-                .sample(1000)
                 .collect{steps ->
                     userRecordRepository.saveUserRecord(StepRecord(stepCount = steps))
                     updateWidget(this@MeasurementService, steps)
