@@ -20,7 +20,7 @@ import com.example.stepcounterapp.ui.theme.Paddings
 
 @Composable
 fun SensorButtonSection(
-    sensorStateHolder: State<SensorState>,
+    sensorState: SensorState,
     input: IMainViewModelInput
 ) {
     Row(
@@ -36,7 +36,7 @@ fun SensorButtonSection(
         Spacer(Modifier.padding(Paddings.small))
         SecondaryButton(
             text = stringResource(
-                id = when (sensorStateHolder.value) {
+                id = when (sensorState) {
                     SensorState.DelayHigh -> R.string.high
                     SensorState.DelayLow -> R.string.low
                 }

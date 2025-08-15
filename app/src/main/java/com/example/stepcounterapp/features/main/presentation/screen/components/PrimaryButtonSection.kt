@@ -23,7 +23,7 @@ private val SECTION_PADDING_VERTICAL = Paddings.xlarge
 
 @Composable
 fun PrimaryButtonSection(
-    mainStateHolder: State<MainState>,
+    mainState: MainState,
     input: IMainViewModelInput
 ) {
     Row(
@@ -36,7 +36,7 @@ fun PrimaryButtonSection(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        when (mainStateHolder.value) {
+        when (mainState) {
             is MainState.Measuring -> {
                 PrimaryButton(
                     text = stringResource(id = R.string.pause),

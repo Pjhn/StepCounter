@@ -76,7 +76,7 @@ fun MainScreen(
                     .padding(paddingValues)
             ) {
                 RecordDetailSection(
-                    mainStateHolder = mainStateHolder,
+                    mainState = mainStateHolder.value,
                     stepRecord = stepRecord.value
                 )
 
@@ -86,12 +86,12 @@ fun MainScreen(
                 )
 
                 SensorButtonSection(
-                    sensorStateHolder = sensorStateHolder,
+                    sensorState = sensorStateHolder.value,
                     input = input
                 )
 
                 PrimaryButtonSection(
-                    mainStateHolder = mainStateHolder,
+                    mainState = mainStateHolder.value,
                     input = input
                 )
             }

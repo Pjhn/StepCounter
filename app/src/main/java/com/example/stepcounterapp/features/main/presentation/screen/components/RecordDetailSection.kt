@@ -39,7 +39,7 @@ private val ICON_BOX_SHAPE = 6.dp
 
 @Composable
 fun RecordDetailSection(
-    mainStateHolder: State<MainState>,
+    mainState: MainState,
     stepRecord: StepRecord
 ) {
     Row(
@@ -60,8 +60,8 @@ fun RecordDetailSection(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CaloriesRow(mainStateHolder, stepRecord)
-                TimeRow(mainStateHolder, stepRecord)
+                CaloriesRow(mainState, stepRecord)
+                TimeRow(mainState, stepRecord)
             }
         }
     }
@@ -69,10 +69,10 @@ fun RecordDetailSection(
 
 @Composable
 private fun CaloriesRow(
-    mainStateHolder: State<MainState>,
+    mainState: MainState,
     stepRecord: StepRecord
 ) {
-    val isMeasuring = mainStateHolder.value is MainState.Measuring
+    val isMeasuring = mainState is MainState.Measuring
 
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -108,10 +108,10 @@ private fun CaloriesRow(
 
 @Composable
 private fun TimeRow(
-    mainStateHolder: State<MainState>,
+    mainState: MainState,
     stepRecord: StepRecord
 ) {
-    val isMeasuring = mainStateHolder.value is MainState.Measuring
+    val isMeasuring = mainState is MainState.Measuring
 
     Row(
         verticalAlignment = Alignment.CenterVertically
