@@ -8,4 +8,6 @@ interface IMainViewModelInput {
     fun pauseMeasurement()
 
     fun updateSensorDelay()
+
+    fun requestWidget()
 }
