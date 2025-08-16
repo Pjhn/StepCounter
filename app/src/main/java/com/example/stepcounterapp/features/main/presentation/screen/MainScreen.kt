@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
@@ -22,18 +23,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.stepcounterapp.R
 import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.main.presentation.input.IMainViewModelInput
 import com.example.stepcounterapp.features.main.presentation.output.MainState
 import com.example.stepcounterapp.features.main.presentation.output.SensorState
-import com.example.stepcounterapp.features.main.presentation.screen.components.MainModalItem
 import com.example.stepcounterapp.features.main.presentation.screen.components.MainTopAppBar
 import com.example.stepcounterapp.features.main.presentation.screen.components.PrimaryButtonSection
 import com.example.stepcounterapp.features.main.presentation.screen.components.RecordDetailSection
 import com.example.stepcounterapp.features.main.presentation.screen.components.SensorButtonSection
 import com.example.stepcounterapp.features.main.presentation.screen.components.StepCountSection
-import com.example.stepcounterapp.ui.components.button.SecondaryButton
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -51,7 +49,9 @@ fun MainScreen(
 
     ModalNavigationDrawer(
         drawerContent = {
-            ModalDrawerSheet {
+            ModalDrawerSheet(
+                modifier = Modifier.width(300.dp)
+            ) {
                 ModalContent(
                     sensorState = sensorStateHolder.value,
                     input = input
@@ -138,19 +138,12 @@ fun ModalContent(
 
         Divider()
 
-        MainModalItem(
-            id = R.string.sensor_delay,
-            button = {
-                SecondaryButton(
-                    text = stringResource(
-                        id = when (sensorState) {
-                            SensorState.DelayHigh -> R.string.high
-                            SensorState.DelayLow -> R.string.low
-                        }
-                    ),
-                    onClick = { input.updateSensorDelay() }
-                )
-            }
+        NavigationDrawerItem(
+            label = { Text("Sensor Delay") },
+            selected = false,
+            onClick = { input.updateSensorDelay() }
         )
+
+
     }
 }

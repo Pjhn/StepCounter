@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.stepcounterapp.ui.theme.Paddings
 
 @Composable
 fun MainModalItem(
@@ -30,7 +29,7 @@ fun MainModalItem(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline,
         )
-        Spacer(Modifier.padding(horizontal = Paddings.xxlarge))
+        Spacer(Modifier.weight(1f))
         button()
     }
 }
