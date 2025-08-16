@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -21,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -53,7 +57,8 @@ fun MainScreen(
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet(
-                modifier = Modifier.width(300.dp)
+                modifier = Modifier.width(300.dp),
+                drawerContainerColor = MaterialTheme.colorScheme.background
             ) {
                 ModalContent(
                     sensorState = sensorStateHolder.value,
@@ -137,14 +142,21 @@ fun ModalContent(
         NavigationDrawerItem(
             label = { Text("Add Widget") },
             selected = false,
+            shape = RoundedCornerShape(12.dp),
+            badge = {
+                Icon(
+                painter = painterResource(R.drawable.ic_add_small),
+                contentDescription = "Add Widget Icon", tint = Color.Unspecified,
+            ) },
             onClick = { input.requestWidget() }
         )
 
-        Divider()
+        Spacer(Modifier.height(8.dp))
 
         NavigationDrawerItem(
             label = { Text("Sensor Delay") },
             selected = false,
+            shape = RoundedCornerShape(12.dp),
             onClick = { input.updateSensorDelay() },
             badge = {
                 Text(
@@ -159,14 +171,14 @@ fun ModalContent(
             }
         )
 
-        Divider()
+        Spacer(Modifier.height(8.dp))
 
         NavigationDrawerItem(
             label = { Text("Version") },
             selected = false,
+            shape = RoundedCornerShape(12.dp),
             onClick = {},
             badge = {
-
                 Text(
                     text = BuildConfig.VERSION_NAME
                 )
