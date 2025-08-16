@@ -22,7 +22,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.stepcounterapp.BuildConfig
+import com.example.stepcounterapp.R
 import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.main.presentation.input.IMainViewModelInput
 import com.example.stepcounterapp.features.main.presentation.output.MainState
@@ -89,7 +92,7 @@ fun MainContent(
     input: IMainViewModelInput,
     stepRecord: State<StepRecord>,
     paddingValues: PaddingValues
-){
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -121,9 +124,10 @@ fun MainContent(
 fun ModalContent(
     sensorState: SensorState,
     input: IMainViewModelInput
-){
+) {
     Column(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(Modifier.height(12.dp))
@@ -141,9 +145,32 @@ fun ModalContent(
         NavigationDrawerItem(
             label = { Text("Sensor Delay") },
             selected = false,
-            onClick = { input.updateSensorDelay() }
+            onClick = { input.updateSensorDelay() },
+            badge = {
+                Text(
+                    text = stringResource(
+                        id = when (sensorState) {
+                            SensorState.DelayHigh -> R.string.high
+                            SensorState.DelayLow -> R.string.low
+                        }
+                    ),
+                    fontWeight = FontWeight.Bold
+                )
+            }
         )
 
+        Divider()
 
+        NavigationDrawerItem(
+            label = { Text("Version") },
+            selected = false,
+            onClick = {},
+            badge = {
+
+                Text(
+                    text = BuildConfig.VERSION_NAME
+                )
+            }
+        )
     }
 }
