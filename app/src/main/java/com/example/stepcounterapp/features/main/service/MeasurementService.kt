@@ -83,7 +83,6 @@ class MeasurementService : Service(), SensorEventListener {
                 }
         }
 
-        pinWidget()
         startForegroundService()
     }
 
@@ -177,19 +176,6 @@ class MeasurementService : Service(), SensorEventListener {
 
         startForeground(1, notification)
     }
-
-    private fun pinWidget() {
-        val widgetManager = AppWidgetManager.getInstance(this)
-        val widgetComponent = ComponentName(this, StepCountWidgetReceiver::class.java)
-        val widgetIds = widgetManager.getAppWidgetIds(widgetComponent)
-
-        if (widgetIds.isNotEmpty()) {
-            return
-        }
-
-        widgetManager.requestPinAppWidget(widgetComponent, null, null)
-    }
-
 
     companion object {
         const val TAG = "MeasurementService"

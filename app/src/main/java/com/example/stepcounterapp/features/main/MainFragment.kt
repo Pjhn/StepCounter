@@ -1,6 +1,8 @@
 package com.example.stepcounterapp.features.main
 
 import android.Manifest
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -24,6 +26,7 @@ import com.example.stepcounterapp.features.main.presentation.output.SensorState
 import com.example.stepcounterapp.features.main.presentation.screen.MainScreen
 import com.example.stepcounterapp.features.main.presentation.viewmodel.MainViewModel
 import com.example.stepcounterapp.features.main.service.MeasurementService
+import com.example.stepcounterapp.features.widget.StepCountWidgetReceiver
 import com.example.stepcounterapp.ui.navigation.safeNavigate
 import com.example.stepcounterapp.ui.theme.StepCounterAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,6 +98,10 @@ class MainFragment : Fragment() {
                                 requireContext().startService(sensorIntent())
                             }
                         }
+
+                        is MainUiEffect.RequestWidget -> {
+                            requestWidget()
+                        }
                     }
                 }
             }
@@ -143,6 +150,17 @@ class MainFragment : Fragment() {
                 SensorState.DelayLow -> MeasurementService.SENSOR_DELAY_LOW
                 SensorState.DelayHigh -> MeasurementService.SENSOR_DELAY_HIGH
             }
+        }
+    }
+
+    private fun requestWidget() {
+        val ctx = requireContext()
+        val widgetManager = AppWidgetManager.getInstance(ctx)
+        val widgetComponent = ComponentName(ctx, StepCountWidgetReceiver::class.java)
+        val widgetIds = widgetManager.getAppWidgetIds(widgetComponent)
+
+        if (widgetIds.isEmpty()) {
+            widgetManager.requestPinAppWidget(widgetComponent, null, null)
         }
     }
 }

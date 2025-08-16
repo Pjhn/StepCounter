@@ -17,4 +17,6 @@ sealed class MainUiEffect {
     object PauseMeasurement : MainUiEffect()
 
     object UpdateSensorDelay : MainUiEffect()
+
+    object RequestWidget : MainUiEffect()
 }

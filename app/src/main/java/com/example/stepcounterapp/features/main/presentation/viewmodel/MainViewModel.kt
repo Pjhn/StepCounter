@@ -105,4 +105,12 @@ class MainViewModel @Inject constructor(
             )
         }
     }
+
+    override fun requestWidget() {
+        viewModelScope.launch {
+            _mainUiEffect.emit(
+                MainUiEffect.RequestWidget
+            )
+        }
+    }
 }
