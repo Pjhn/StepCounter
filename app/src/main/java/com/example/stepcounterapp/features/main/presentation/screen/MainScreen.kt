@@ -37,8 +37,8 @@ import com.example.stepcounterapp.features.main.presentation.output.SensorState
 import com.example.stepcounterapp.features.main.presentation.screen.components.MainTopAppBar
 import com.example.stepcounterapp.features.main.presentation.screen.components.PrimaryButtonSection
 import com.example.stepcounterapp.features.main.presentation.screen.components.RecordDetailSection
-import com.example.stepcounterapp.features.main.presentation.screen.components.SensorButtonSection
 import com.example.stepcounterapp.features.main.presentation.screen.components.StepCountSection
+import com.example.stepcounterapp.features.main.presentation.screen.components.StepGoalSection
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -113,8 +113,9 @@ fun MainContent(
             modifier = Modifier.weight(1f)
         )
 
-        SensorButtonSection(
-            sensorState = sensorState,
+        StepGoalSection(
+            stepRecord = stepRecord.value,
+            stepGoal = 10000,
             input = input
         )
 
