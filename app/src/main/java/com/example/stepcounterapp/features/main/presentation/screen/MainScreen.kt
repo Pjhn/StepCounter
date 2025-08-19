@@ -21,7 +21,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -37,8 +41,9 @@ import com.example.stepcounterapp.features.main.presentation.output.SensorState
 import com.example.stepcounterapp.features.main.presentation.screen.components.MainTopAppBar
 import com.example.stepcounterapp.features.main.presentation.screen.components.PrimaryButtonSection
 import com.example.stepcounterapp.features.main.presentation.screen.components.RecordDetailSection
-import com.example.stepcounterapp.features.main.presentation.screen.components.SensorButtonSection
 import com.example.stepcounterapp.features.main.presentation.screen.components.StepCountSection
+import com.example.stepcounterapp.features.main.presentation.screen.components.StepGoalSection
+import com.example.stepcounterapp.ui.dialog.NumberInputDialog
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -49,10 +54,14 @@ fun MainScreen(
     mainStateHolder: State<MainState>,
     sensorStateHolder: State<SensorState>,
     input: IMainViewModelInput,
-    stepRecord: State<StepRecord>
+    stepRecord: State<StepRecord>,
+    stepGoal: State<Int>
 ) {
+    var openAlertDialog by remember { mutableStateOf(false) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -81,10 +90,24 @@ fun MainScreen(
         ) { paddingValues ->
             MainContent(
                 mainState = mainStateHolder.value,
-                sensorState = sensorStateHolder.value,
                 input = input,
                 stepRecord = stepRecord,
+                stepGoal = stepGoal,
+                onEditGoal = { openAlertDialog = true },
                 paddingValues = paddingValues
+            )
+        }
+
+        if (openAlertDialog) {
+            NumberInputDialog(
+                initialNumber = stepGoal.value,
+                onConfirm = { new ->
+                    input.updateStepGoal(new)
+                    openAlertDialog = false
+                },
+                onDismiss = {
+                    openAlertDialog = false
+                }
             )
         }
     }
@@ -93,9 +116,10 @@ fun MainScreen(
 @Composable
 fun MainContent(
     mainState: MainState,
-    sensorState: SensorState,
     input: IMainViewModelInput,
     stepRecord: State<StepRecord>,
+    stepGoal: State<Int>,
+    onEditGoal: ()->Unit,
     paddingValues: PaddingValues
 ) {
     Column(
@@ -113,9 +137,10 @@ fun MainContent(
             modifier = Modifier.weight(1f)
         )
 
-        SensorButtonSection(
-            sensorState = sensorState,
-            input = input
+        StepGoalSection(
+            stepRecord = stepRecord.value,
+            stepGoal = stepGoal.value,
+            buttonOnClick = onEditGoal
         )
 
         PrimaryButtonSection(

@@ -3,6 +3,7 @@ package com.example.stepcounterapp.features.main.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stepcounterapp.features.common.model.StepRecord
+import com.example.stepcounterapp.features.common.repository.StepGoalRepository
 import com.example.stepcounterapp.features.common.repository.UserRecordRepository
 import com.example.stepcounterapp.features.main.presentation.input.IMainViewModelInput
 import com.example.stepcounterapp.features.main.presentation.output.IMainViewModelOutput
@@ -22,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val userRecordRepository: UserRecordRepository
+    private val userRecordRepository: UserRecordRepository,
+    private val stepGoalRepository: StepGoalRepository
 ) : ViewModel(), IMainViewModelInput, IMainViewModelOutput {
 
     val output: IMainViewModelOutput = this
@@ -49,6 +51,13 @@ class MainViewModel @Inject constructor(
             initialValue = StepRecord()
         )
 
+    val stepGoal: StateFlow<Int> = stepGoalRepository.goal
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = StepGoalRepository.Keys.DEFAULT_GOAL
+        )
+
     init {
         viewModelScope.launch {
             userRecordRepository.initializeTodayRecord()
@@ -64,7 +73,7 @@ class MainViewModel @Inject constructor(
     fun updateSensorState() {
         viewModelScope.launch {
             _sensorState.update { current ->
-                when (current){
+                when (current) {
                     SensorState.DelayHigh -> SensorState.DelayLow
                     SensorState.DelayLow -> SensorState.DelayHigh
                 }
@@ -111,6 +120,12 @@ class MainViewModel @Inject constructor(
             _mainUiEffect.emit(
                 MainUiEffect.RequestWidget
             )
+        }
+    }
+
+    override fun updateStepGoal(stepGoal: Int) {
+        viewModelScope.launch {
+            stepGoalRepository.updateGoal(stepGoal)
         }
     }
 }

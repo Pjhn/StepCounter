@@ -10,4 +10,6 @@ interface IMainViewModelInput {
     fun updateSensorDelay()
 
     fun requestWidget()
+
+    fun updateStepGoal(stepGoal: Int)
 }
