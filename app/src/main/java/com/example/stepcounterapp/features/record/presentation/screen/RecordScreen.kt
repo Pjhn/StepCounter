@@ -13,6 +13,7 @@ import com.example.stepcounterapp.features.common.model.enums.Duration
 import com.example.stepcounterapp.features.record.domain.enums.RecordCategories
 import com.example.stepcounterapp.features.record.presentation.input.IRecordViewModelInput
 import com.example.stepcounterapp.features.record.presentation.output.RecordState
+import com.example.stepcounterapp.features.record.presentation.screen.components.AchievementSection
 import com.example.stepcounterapp.features.record.presentation.screen.components.CategorySection
 import com.example.stepcounterapp.features.record.presentation.screen.components.ChartSection
 import com.example.stepcounterapp.features.record.presentation.screen.components.DurationButtonSection
@@ -60,6 +61,13 @@ fun RecordScreen(
                 modifier = Modifier.padding(horizontal = Paddings.xxlarge),
                 records = chartRecords.value, selectedDuration = selectedDuration.value
             )
+            Spacer(modifier = Modifier.padding(Paddings.medium))
+            AchievementSection(
+                modifier = Modifier.padding(horizontal = Paddings.xxlarge),
+                stepCount = 7321,
+                stepGoal = 10000,
+            )
         }
     }
 }
+

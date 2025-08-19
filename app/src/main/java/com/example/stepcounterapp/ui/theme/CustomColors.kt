@@ -18,6 +18,7 @@ data class CustomColors (
     val brandColor: Color = Color.Blue,
     val defaultTextButton: Color = Color.DarkGray,
     val selectedTextButtonBackground: Color = Color.LightGray,
+    val indicator: Color = Color.Red
 ) {
     val primary: Color get() = material.primary
     val onPrimary: Color get() = material.onPrimary
