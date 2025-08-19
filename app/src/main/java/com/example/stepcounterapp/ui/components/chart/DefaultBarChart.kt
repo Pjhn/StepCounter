@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 
 private val CHART_HEIGHT = 120.dp
 
@@ -64,13 +65,18 @@ private fun BarChart.configureChart(xLabels: List<String>) {
         setGridColor(Color.parseColor("#80CCCCCC"))
         setGridLineWidth(0.5f)
         setDrawAxisLine(false)
-        axisMinimum = 0f
         setLabelCount(4, true)
+
+        axisMinimum = 0f
+        textColor = Color.parseColor("#99363636")
     }
     axisRight.isEnabled = false
 
     setPinchZoom(false)
     setScaleEnabled(false)
+    setTouchEnabled(false)
+
+    setDrawValueAboveBar(true)
 }
 
 private fun createBarData(yValues: List<Float>): BarData {
@@ -78,8 +84,20 @@ private fun createBarData(yValues: List<Float>): BarData {
         BarEntry(index.toFloat(), value)
     }
     val dataSet = BarDataSet(entries, "").apply {
+        valueFormatter = object : ValueFormatter() {
+            override fun getBarLabel(barEntry: BarEntry?): String? {
+                if (barEntry == null) return ""
+                if (barEntry.y == 0f) return ""
+                return if (barEntry.y % 1f == 0f) barEntry.y.toInt().toString()
+                else String.format("%.2f", barEntry.y)
+            }
+        }
+
+        valueTextSize = 10f
+        valueTextColor = Color.parseColor("#363636")
+
         setGradientColor(0xFFEC8F3D.toInt(), 0xFFE44747.toInt())
-        setDrawValues(false)
+        setDrawValues(true)
     }
     return BarData(dataSet).apply { barWidth = 0.6f }
 }
