@@ -54,8 +54,8 @@ class MeasurementService : Service(), SensorEventListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action){
-            SENSOR_DELAY_HIGH -> applySensorDelay(SensorManager.SENSOR_DELAY_UI)
-            SENSOR_DELAY_LOW -> applySensorDelay(SensorManager.SENSOR_DELAY_NORMAL)
+            SENSOR_DELAY_HIGH -> applySensorDelay(SensorManager.SENSOR_DELAY_NORMAL)
+            SENSOR_DELAY_LOW -> applySensorDelay(SensorManager.SENSOR_DELAY_UI)
         }
         return super.onStartCommand(intent, flags, startId)
     }
