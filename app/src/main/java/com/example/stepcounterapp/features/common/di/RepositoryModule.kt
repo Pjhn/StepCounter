@@ -1,8 +1,8 @@
 package com.example.stepcounterapp.features.common.di
 
-import com.example.stepcounterapp.features.common.repository.IUserGoalRepository
+import com.example.stepcounterapp.features.common.repository.IStepGoalRepository
 import com.example.stepcounterapp.features.common.repository.IUserRecordRepository
-import com.example.stepcounterapp.features.common.repository.UserGoalRepository
+import com.example.stepcounterapp.features.common.repository.StepGoalRepository
 import com.example.stepcounterapp.features.common.repository.UserRecordRepository
 import dagger.Binds
 import dagger.Module
@@ -15,9 +15,9 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindUserGoalRepository(
-        userGoalRepository: UserGoalRepository
-    ): IUserGoalRepository
+    abstract fun bindStepGoalRepository(
+        stepGoalRepository: StepGoalRepository
+    ): IStepGoalRepository
 
     @Binds
     @Singleton

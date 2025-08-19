@@ -9,20 +9,20 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class UserGoalRepository @Inject constructor(
+class StepGoalRepository @Inject constructor(
     private val datastore: DataStore<Preferences>
-): IUserGoalRepository {
-    override val goal: Flow<Int> = datastore.data.map { pref -> pref[keys.GOAL] ?: keys.DEFAULT_GOAL }
+): IStepGoalRepository {
+    override val goal: Flow<Int> = datastore.data.map { pref -> pref[Keys.GOAL] ?: Keys.DEFAULT_GOAL }
 
     override suspend fun updateGoal(goal: Int) {
-        datastore.edit { pref -> pref[keys.GOAL] = goal}
+        datastore.edit { pref -> pref[Keys.GOAL] = goal}
     }
 
     override suspend fun getGoal(): Int {
-        return datastore.data.map { pref -> pref[keys.GOAL] ?: keys.DEFAULT_GOAL }.first()
+        return datastore.data.map { pref -> pref[Keys.GOAL] ?: Keys.DEFAULT_GOAL }.first()
     }
 
-    private object keys {
+    private object Keys {
         val GOAL = intPreferencesKey("goal")
         const val DEFAULT_GOAL= 6000
     }
