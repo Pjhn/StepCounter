@@ -60,7 +60,8 @@ class MainFragment : Fragment() {
                         mainStateHolder = viewModel.mainState.collectAsState(),
                         sensorStateHolder = viewModel.sensorState.collectAsState(),
                         input = viewModel.input,
-                        stepRecord = viewModel.stepRecord.collectAsState()
+                        stepRecord = viewModel.stepRecord.collectAsState(),
+                        stepGoal = viewModel.stepGoal.collectAsState()
                     )
                 }
             }

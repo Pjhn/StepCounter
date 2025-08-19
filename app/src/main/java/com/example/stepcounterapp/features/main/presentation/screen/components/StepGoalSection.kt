@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.stepcounterapp.features.common.model.StepRecord
-import com.example.stepcounterapp.features.main.presentation.input.IMainViewModelInput
 import com.example.stepcounterapp.ui.components.button.SecondaryButton
 import com.example.stepcounterapp.ui.theme.Paddings
 
@@ -19,7 +18,7 @@ import com.example.stepcounterapp.ui.theme.Paddings
 fun StepGoalSection(
     stepRecord: StepRecord,
     stepGoal: Int,
-    input: IMainViewModelInput
+    buttonOnClick: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(start = Paddings.xxlarge),
@@ -38,7 +37,7 @@ fun StepGoalSection(
         Spacer(Modifier.padding(Paddings.small))
         SecondaryButton(
             text = stepGoal.toString(),
-            onClick = {  }
+            onClick = { buttonOnClick() }
         )
     }
 }
