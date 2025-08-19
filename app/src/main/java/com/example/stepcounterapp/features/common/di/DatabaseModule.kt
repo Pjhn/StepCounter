@@ -1,6 +1,10 @@
 package com.example.stepcounterapp.features.common.di
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.example.stepcounterapp.features.common.database.StepRecordDatabase
 import com.example.stepcounterapp.features.common.database.dao.StepRecordDao
@@ -31,4 +35,15 @@ object DatabaseModule {
     fun provideStepRecordDao(database: StepRecordDatabase): StepRecordDao {
         return database.stepRecordDao()
     }
+
+    @Provides
+    @Singleton
+    fun providePreferencesDatastore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            produceFile = {
+                context.preferencesDataStoreFile("user_prefs")
+            }
+    )
 }
