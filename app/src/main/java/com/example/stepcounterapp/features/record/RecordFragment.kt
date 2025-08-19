@@ -40,6 +40,8 @@ class RecordFragment : Fragment() {
                         selectedCategory = viewModel.selectedCategory.collectAsState(),
                         selectedDuration = viewModel.selectedDuration.collectAsState(),
                         chartRecords = viewModel.chartRecords.collectAsState(),
+                        stepRecord = viewModel.stepRecord.collectAsState(),
+                        stepGoal = viewModel.stepGoal.collectAsState(),
                         input = viewModel.input,
                     )
                 }

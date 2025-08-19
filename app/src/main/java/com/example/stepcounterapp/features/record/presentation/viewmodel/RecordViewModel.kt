@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.stepcounterapp.features.common.model.StepRecord
 import com.example.stepcounterapp.features.common.model.enums.Duration
 import com.example.stepcounterapp.features.common.model.enums.Duration.*
+import com.example.stepcounterapp.features.common.repository.StepGoalRepository
+import com.example.stepcounterapp.features.common.repository.UserRecordRepository
 import com.example.stepcounterapp.features.record.domain.enums.RecordCategories
 import com.example.stepcounterapp.features.record.domain.enums.RecordCategories.*
 import com.example.stepcounterapp.features.record.domain.usecase.GetRecordsForPeriodUseCase
@@ -16,14 +18,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class RecordViewModel @Inject constructor(
-    private val getRecordsForPeriodUseCase: GetRecordsForPeriodUseCase
+    private val getRecordsForPeriodUseCase: GetRecordsForPeriodUseCase,
+    private val userRecordRepository: UserRecordRepository,
+    private val stepGoalRepository: StepGoalRepository
 ) : ViewModel(), IRecordViewModelInput, IRecordViewModelOutput {
 
     val output: IRecordViewModelOutput = this
@@ -48,6 +54,20 @@ class RecordViewModel @Inject constructor(
 
     private val _chartRecords = MutableStateFlow<List<StepRecord>>(emptyList())
     val chartRecords: StateFlow<List<StepRecord>> = _chartRecords
+
+    val stepRecord: StateFlow<StepRecord> = userRecordRepository.userRecord
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = StepRecord()
+        )
+
+    val stepGoal: StateFlow<Int> = stepGoalRepository.goal
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = StepGoalRepository.Keys.DEFAULT_GOAL
+        )
 
     init {
         viewModelScope.launch {

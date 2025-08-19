@@ -28,6 +28,8 @@ fun RecordScreen(
     selectedCategory: State<RecordCategories>,
     selectedDuration: State<Duration>,
     chartRecords: State<List<StepRecord>>,
+    stepRecord: State<StepRecord>,
+    stepGoal: State<Int>,
     input: IRecordViewModelInput,
 ) {
     Scaffold(
@@ -64,8 +66,8 @@ fun RecordScreen(
             Spacer(modifier = Modifier.padding(Paddings.medium))
             AchievementSection(
                 modifier = Modifier.padding(horizontal = Paddings.xxlarge),
-                stepCount = 7321,
-                stepGoal = 10000,
+                stepCount = stepRecord.value.stepCount ?: 0,
+                stepGoal = stepGoal.value,
             )
         }
     }

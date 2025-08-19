@@ -34,7 +34,8 @@ fun AchievementIndicator(
             modifier = Modifier.fillMaxSize(),
             progress = progress.coerceIn(0f, 1f),
             strokeWidth = stroke,
-            color = MaterialTheme.colors.indicator
+            color = MaterialTheme.colors.indicator,
+            trackColor = MaterialTheme.colors.surface
         )
 
         if (label != null) {

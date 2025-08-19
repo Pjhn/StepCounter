@@ -17,10 +17,14 @@ import com.example.stepcounterapp.ui.theme.colors
 @Composable
 fun AchievementSection(
     modifier: Modifier = Modifier,
-    stepCount: Int,
-    stepGoal: Int,
+    stepCount: Int = 0,
+    stepGoal: Int = 0,
     indicatorSize: Dp = 64.dp
 ) {
+    val progress = if (stepCount > 0 && stepGoal > 0) {
+        stepCount / stepGoal.toFloat()
+    } else 0f
+
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
@@ -34,7 +38,7 @@ fun AchievementSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             AchievementIndicator(
-                progress = stepCount / stepGoal.toFloat(),
+                progress = progress,
                 size = indicatorSize,
                 stroke = 8.dp
             )
