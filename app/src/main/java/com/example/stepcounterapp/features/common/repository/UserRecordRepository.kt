@@ -21,7 +21,7 @@ class UserRecordRepository @Inject constructor(
     override suspend fun initializeTodayRecord() {
         val now = LocalDate.now()
         val latestEntity = stepRecordDao.getLatestStepRecord().firstOrNull()
-        val daysGap = ChronoUnit.DAYS.between(latestEntity?.date, now)
+        val daysGap = if (latestEntity != null) ChronoUnit.DAYS.between(latestEntity.date, now) else -1
 
         if (latestEntity == null || daysGap >= 1) {
             val entity = StepRecordEntity(
