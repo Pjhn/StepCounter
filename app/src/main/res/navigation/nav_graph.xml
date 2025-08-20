@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/main_fragment"
-        android:name="com.example.stepcounterapp.features.main.MainFragment"
+        android:name="com.pjhn.stepcounter.features.main.MainFragment"
         android:label="Main">
         <action
             android:id="@+id/action_main_to_record"
@@ -16,6 +16,6 @@
 
     <fragment
         android:id="@+id/record_fragment"
-        android:name="com.example.stepcounterapp.features.record.RecordFragment"
+        android:name="com.pjhn.stepcounter.features.record.RecordFragment"
         android:label="Record"/>
 </navigation>

@@ -1,0 +1,22 @@
+package com.pjhn.stepcounter.features.main.presentation.output
+
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+
+interface IMainViewModelOutput {
+    val mainState: StateFlow<MainState>
+    val sensorState: StateFlow<SensorState>
+    val mainUiEffect: SharedFlow<MainUiEffect>
+}
+
+sealed class MainUiEffect {
+    object OpenRecord : MainUiEffect()
+
+    object StartMeasurement : MainUiEffect()
+
+    object PauseMeasurement : MainUiEffect()
+
+    object UpdateSensorDelay : MainUiEffect()
+
+    object RequestWidget : MainUiEffect()
+}
