@@ -11,18 +11,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.pjhn.stepcounter.R
 import com.pjhn.stepcounter.features.common.model.StepRecord
 import com.pjhn.stepcounter.ui.theme.Paddings
+import java.util.Locale
 
 @Composable
 fun StepCountSection(
-    stepRecord: StepRecord,
-    modifier: Modifier = Modifier
-) {
+    modifier: Modifier = Modifier,
+    stepRecord: State<StepRecord>,
+    ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -37,7 +39,7 @@ fun StepCountSection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${stepRecord.stepCount}",
+                    text = "${stepRecord.value.stepCount}",
                     style = MaterialTheme.typography.displayLarge,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.alignByBaseline()
@@ -55,7 +57,7 @@ fun StepCountSection(
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    text = String.format("%.2f", stepRecord.distance),
+                    text = String.format(Locale.getDefault(),"%.2f", stepRecord.value.distance),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.alignByBaseline()

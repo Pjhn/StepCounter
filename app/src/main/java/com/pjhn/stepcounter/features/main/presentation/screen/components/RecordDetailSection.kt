@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,7 +40,7 @@ private val ICON_BOX_SHAPE = 6.dp
 @Composable
 fun RecordDetailSection(
     mainState: MainState,
-    stepRecord: StepRecord
+    stepRecord: State<StepRecord>
 ) {
     Row(
         modifier = Modifier
@@ -59,8 +60,8 @@ fun RecordDetailSection(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CaloriesRow(mainState, stepRecord)
-                TimeRow(mainState, stepRecord)
+                CaloriesRow(mainState, stepRecord.value)
+                TimeRow(mainState, stepRecord.value)
             }
         }
     }

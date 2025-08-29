@@ -1,5 +1,6 @@
 package com.pjhn.stepcounter.features.record.presentation.screen.components
 
+import androidx.compose.runtime.State
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,14 +43,14 @@ private val ICON_BOX_SHAPE = 6.dp
 @Composable
 fun TotalSection(
     modifier: Modifier = Modifier,
-    records: List<StepRecord>,
-    selectedDuration: Duration
+    records: State<List<StepRecord>>,
+    selectedDuration: State<Duration>
 ) {
     val today = LocalDate.now()
-    val filteredRecords = when (selectedDuration) {
-        WEEK -> records.filter { it.date != null && it.date!! >= today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)) }
-        MONTH -> records.filter { it.date != null && it.date!! >= today.withDayOfMonth(1) }
-        YEAR -> records.filter { it.date != null && it.date!! >= today.withDayOfYear(1) }
+    val filteredRecords = when (selectedDuration.value) {
+        WEEK -> records.value.filter { it.date != null && it.date!! >= today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)) }
+        MONTH -> records.value.filter { it.date != null && it.date!! >= today.withDayOfMonth(1) }
+        YEAR -> records.value.filter { it.date != null && it.date!! >= today.withDayOfYear(1) }
     }
 
     val totalCalories = filteredRecords.sumOf { it.calories ?: 0.0 }

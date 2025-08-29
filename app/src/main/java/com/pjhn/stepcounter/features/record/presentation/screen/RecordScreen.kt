@@ -43,31 +43,31 @@ fun RecordScreen(
                 .padding(paddingValues)
         ) {
             CategorySection(
-                selectedCategory = selectedCategory.value,
+                selectedCategory = selectedCategory,
                 input = input
             )
             Spacer(modifier = Modifier.padding(Paddings.medium))
             DurationButtonSection(
-                selectedDuration = selectedDuration.value,
+                selectedDuration = selectedDuration,
                 input = input
             )
             Spacer(modifier = Modifier.padding(Paddings.medium))
             ChartSection(
                 modifier = Modifier.padding(horizontal = Paddings.xxlarge),
-                selectedCategory = selectedCategory.value,
-                selectedDuration = selectedDuration.value,
-                records = chartRecords.value
+                selectedCategory = selectedCategory,
+                selectedDuration = selectedDuration,
+                records = chartRecords
             )
             Spacer(modifier = Modifier.padding(Paddings.large))
             TotalSection(
                 modifier = Modifier.padding(horizontal = Paddings.xxlarge),
-                records = chartRecords.value, selectedDuration = selectedDuration.value
+                records = chartRecords, selectedDuration = selectedDuration
             )
             Spacer(modifier = Modifier.padding(Paddings.medium))
             AchievementSection(
                 modifier = Modifier.padding(horizontal = Paddings.xxlarge),
-                stepCount = stepRecord.value.stepCount ?: 0,
-                stepGoal = stepGoal.value,
+                stepRecord = stepRecord,
+                stepGoal = stepGoal,
             )
         }
     }

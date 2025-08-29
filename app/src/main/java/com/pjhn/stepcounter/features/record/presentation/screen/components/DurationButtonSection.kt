@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +28,7 @@ private val DURATION_SECTION_SPACED_BY = Paddings.xlarge
 
 @Composable
 fun DurationButtonSection(
-    selectedDuration: Duration,
+    selectedDuration: State<Duration>,
     input: IRecordViewModelInput
 ) {
     Row(
@@ -39,7 +40,7 @@ fun DurationButtonSection(
         Duration.entries.forEach { duration ->
             DurationButton(
                 duration = duration,
-                isSelected = duration == selectedDuration,
+                isSelected = duration == selectedDuration.value,
                 onClick = { input.selectDuration(duration) })
         }
     }

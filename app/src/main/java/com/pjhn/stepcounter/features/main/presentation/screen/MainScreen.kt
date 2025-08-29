@@ -129,17 +129,17 @@ fun MainContent(
     ) {
         RecordDetailSection(
             mainState = mainState,
-            stepRecord = stepRecord.value
+            stepRecord = stepRecord
         )
 
         StepCountSection(
-            stepRecord = stepRecord.value,
+            stepRecord = stepRecord,
             modifier = Modifier.weight(1f)
         )
 
         StepGoalSection(
-            stepRecord = stepRecord.value,
-            stepGoal = stepGoal.value,
+            stepRecord = stepRecord,
+            stepGoal = stepGoal,
             buttonOnClick = onEditGoal
         )
 

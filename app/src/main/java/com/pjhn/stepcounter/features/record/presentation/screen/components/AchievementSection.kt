@@ -8,19 +8,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.pjhn.stepcounter.features.common.model.StepRecord
 import com.pjhn.stepcounter.ui.theme.colors
 
 @Composable
 fun AchievementSection(
     modifier: Modifier = Modifier,
-    stepCount: Int = 0,
-    stepGoal: Int = 0,
+    stepRecord: State<StepRecord>,
+    stepGoal: State<Int?>,
     indicatorSize: Dp = 64.dp
 ) {
+    val stepCount = stepRecord.value.stepCount ?: 0
+    val stepGoal = stepGoal.value ?: 0
     val progress = if (stepCount > 0 && stepGoal > 0) {
         stepCount / stepGoal.toFloat()
     } else 0f

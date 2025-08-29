@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.pjhn.stepcounter.features.common.model.StepRecord
@@ -16,8 +17,8 @@ import com.pjhn.stepcounter.ui.theme.Paddings
 
 @Composable
 fun StepGoalSection(
-    stepRecord: StepRecord,
-    stepGoal: Int,
+    stepRecord: State<StepRecord>,
+    stepGoal: State<Int>,
     buttonOnClick: () -> Unit
 ) {
     Row(
@@ -26,7 +27,7 @@ fun StepGoalSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stepRecord.stepCount.toString(),
+            text = stepRecord.value.stepCount.toString(),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline,
         )
@@ -36,7 +37,7 @@ fun StepGoalSection(
         )
         Spacer(Modifier.padding(Paddings.small))
         SecondaryButton(
-            text = stepGoal.toString(),
+            text = "${stepGoal.value}",
             onClick = { buttonOnClick() }
         )
     }

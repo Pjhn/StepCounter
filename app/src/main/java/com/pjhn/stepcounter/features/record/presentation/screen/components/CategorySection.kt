@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +32,7 @@ private val CATEGORY_SECTION_SPACED_BY = Paddings.extra
 
 @Composable
 fun CategorySection(
-    selectedCategory: RecordCategories,
+    selectedCategory: State<RecordCategories>,
     input: IRecordViewModelInput
 ) {
     Row(
@@ -46,7 +47,7 @@ fun CategorySection(
         entries.forEach { category ->
             CategoryBox(
                 category = category,
-                isSelected = category == selectedCategory,
+                isSelected = category == selectedCategory.value,
                 onClick = { input.selectCategory(category) })
         }
     }

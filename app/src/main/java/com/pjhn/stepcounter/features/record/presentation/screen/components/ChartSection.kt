@@ -1,6 +1,7 @@
 package com.pjhn.stepcounter.features.record.presentation.screen.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import com.pjhn.stepcounter.features.common.model.StepRecord
 import com.pjhn.stepcounter.features.common.model.enums.Duration
@@ -12,32 +13,32 @@ import com.pjhn.stepcounter.features.record.presentation.screen.components.chart
 @Composable
 fun ChartSection(
     modifier: Modifier,
-    selectedCategory: RecordCategories,
-    selectedDuration: Duration,
-    records: List<StepRecord>
+    selectedCategory: State<RecordCategories>,
+    selectedDuration: State<Duration>,
+    records: State<List<StepRecord>>
 ) {
-    when (selectedDuration) {
+    when (selectedDuration.value) {
         Duration.WEEK -> {
             WeeklyBarChart(
                 modifier = modifier,
-                records = records,
-                selectedCategory = selectedCategory
+                records = records.value,
+                selectedCategory = selectedCategory.value
             )
         }
 
         Duration.MONTH -> {
             MonthlyBarChart(
                 modifier = modifier,
-                records = records,
-                selectedCategory = selectedCategory
+                records = records.value,
+                selectedCategory = selectedCategory.value
             )
         }
 
         Duration.YEAR -> {
             YearlyBarChart(
                 modifier = modifier,
-                records = records,
-                selectedCategory = selectedCategory
+                records = records.value,
+                selectedCategory = selectedCategory.value
             )
         }
     }
