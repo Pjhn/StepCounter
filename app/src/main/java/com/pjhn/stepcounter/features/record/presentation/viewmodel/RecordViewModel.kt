@@ -6,10 +6,11 @@ import com.pjhn.stepcounter.features.common.model.StepRecord
 import com.pjhn.stepcounter.features.common.model.enums.Duration
 import com.pjhn.stepcounter.features.common.model.enums.Duration.*
 import com.pjhn.stepcounter.features.common.repository.StepGoalRepository
-import com.pjhn.stepcounter.features.common.repository.UserRecordRepository
 import com.pjhn.stepcounter.features.record.domain.enums.RecordCategories
 import com.pjhn.stepcounter.features.record.domain.enums.RecordCategories.*
 import com.pjhn.stepcounter.features.record.domain.usecase.GetRecordsForPeriodUseCase
+import com.pjhn.stepcounter.features.record.domain.usecase.GetStepGoalUseCase
+import com.pjhn.stepcounter.features.record.domain.usecase.GetStepRecordUseCase
 import com.pjhn.stepcounter.features.record.presentation.input.IRecordViewModelInput
 import com.pjhn.stepcounter.features.record.presentation.output.IRecordViewModelOutput
 import com.pjhn.stepcounter.features.record.presentation.output.RecordState
@@ -28,8 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RecordViewModel @Inject constructor(
     private val getRecordsForPeriodUseCase: GetRecordsForPeriodUseCase,
-    private val userRecordRepository: UserRecordRepository,
-    private val stepGoalRepository: StepGoalRepository
+    private val getStepGoalUseCase: GetStepGoalUseCase,
+    private val getStepRecordUseCase: GetStepRecordUseCase,
 ) : ViewModel(), IRecordViewModelInput, IRecordViewModelOutput {
 
     val output: IRecordViewModelOutput = this
@@ -55,15 +56,14 @@ class RecordViewModel @Inject constructor(
     private val _chartRecords = MutableStateFlow<List<StepRecord>>(emptyList())
     val chartRecords: StateFlow<List<StepRecord>> = _chartRecords
 
-    val stepRecord: StateFlow<StepRecord> = userRecordRepository.userRecord
+    val stepRecord: StateFlow<StepRecord> = getStepRecordUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = StepRecord()
         )
 
-    val stepGoal: StateFlow<Int> = stepGoalRepository.goal
-        .stateIn(
+    val stepGoal: StateFlow<Int> = getStepGoalUseCase().stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = StepGoalRepository.Keys.DEFAULT_GOAL
