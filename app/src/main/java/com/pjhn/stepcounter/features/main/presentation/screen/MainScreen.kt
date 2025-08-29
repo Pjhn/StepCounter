@@ -162,10 +162,10 @@ fun ModalContent(
     ) {
         Spacer(Modifier.height(12.dp))
 
-        Text("Settings", modifier = Modifier.padding(16.dp))
+        Text(stringResource(R.string.settings), modifier = Modifier.padding(16.dp))
 
         NavigationDrawerItem(
-            label = { Text("Add Widget") },
+            label = { Text(stringResource(R.string.add_widget)) },
             selected = false,
             shape = RoundedCornerShape(12.dp),
             badge = {
@@ -179,7 +179,7 @@ fun ModalContent(
         Spacer(Modifier.height(8.dp))
 
         NavigationDrawerItem(
-            label = { Text("Sensor Delay") },
+            label = { Text(stringResource(R.string.sensor_delay)) },
             selected = false,
             shape = RoundedCornerShape(12.dp),
             onClick = { input.updateSensorDelay() },
@@ -199,7 +199,7 @@ fun ModalContent(
         Spacer(Modifier.height(8.dp))
 
         NavigationDrawerItem(
-            label = { Text("Version") },
+            label = { Text(stringResource(R.string.version)) },
             selected = false,
             shape = RoundedCornerShape(12.dp),
             onClick = {},
