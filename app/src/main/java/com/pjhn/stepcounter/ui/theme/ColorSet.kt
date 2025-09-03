@@ -30,6 +30,7 @@ sealed class ColorSet {
             divider = Color(0XFFEFEFEF),
             pauseButton = Color(0XFFE44747),
             defaultTextButton = Color(0xFF868686),
+            wideTextButton = Color(0xFFb4b4b4),
             selectedTextButtonBackground = Color(0xFFF5F5F5),
             indicator = Color(0xFFF25C37)
 

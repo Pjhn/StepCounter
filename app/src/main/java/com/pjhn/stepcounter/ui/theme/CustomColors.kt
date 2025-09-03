@@ -16,6 +16,7 @@ data class CustomColors (
     val pauseButton: Color = Color.Blue,
     val brandColor: Color = Color.Blue,
     val defaultTextButton: Color = Color.DarkGray,
+    val wideTextButton: Color = Color.LightGray,
     val selectedTextButtonBackground: Color = Color.LightGray,
     val indicator: Color = Color.Red
 ) {
