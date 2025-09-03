@@ -61,8 +61,6 @@ fun MainScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-
-
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet(

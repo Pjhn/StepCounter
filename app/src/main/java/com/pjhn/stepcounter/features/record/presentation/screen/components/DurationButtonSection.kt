@@ -23,8 +23,7 @@ import com.pjhn.stepcounter.features.record.presentation.input.IRecordViewModelI
 import com.pjhn.stepcounter.ui.theme.Paddings
 import com.pjhn.stepcounter.ui.theme.colors
 
-private val DURATION_SECTION_PADDING_HORIZONTAL = Paddings.xxlarge
-private val DURATION_SECTION_SPACED_BY = Paddings.xlarge
+private val DURATION_SECTION_SPACED_BY = Paddings.medium
 
 @Composable
 fun DurationButtonSection(
@@ -33,8 +32,7 @@ fun DurationButtonSection(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = DURATION_SECTION_PADDING_HORIZONTAL),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(DURATION_SECTION_SPACED_BY)
     ) {
         Duration.entries.forEach { duration ->

@@ -12,7 +12,7 @@ import com.pjhn.stepcounter.features.record.presentation.screen.components.chart
 
 @Composable
 fun ChartSection(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     selectedCategory: State<RecordCategories>,
     selectedDuration: State<Duration>,
     records: State<List<StepRecord>>

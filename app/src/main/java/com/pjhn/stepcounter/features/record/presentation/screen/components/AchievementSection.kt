@@ -37,6 +37,7 @@ fun AchievementSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(84.dp)
                 .padding(start = 10.dp, end = 20.dp, top = 10.dp, bottom = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
