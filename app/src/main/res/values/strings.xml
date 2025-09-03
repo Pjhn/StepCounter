@@ -6,6 +6,7 @@
     <string name="pause">PAUSE</string>
     <string name="high">High</string>
     <string name="low">Low</string>
+    <string name="rate_on_play_store">Rate on Play Store</string>">
 
     <!-- UI Labels -->
     <string name="calories_unit">kcal</string>
