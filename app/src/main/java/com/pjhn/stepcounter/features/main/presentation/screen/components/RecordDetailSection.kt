@@ -1,5 +1,9 @@
 package com.pjhn.stepcounter.features.main.presentation.screen.components
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,11 +18,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +39,7 @@ import com.pjhn.stepcounter.features.common.model.StepRecord
 import com.pjhn.stepcounter.features.main.presentation.output.MainState
 import com.pjhn.stepcounter.ui.theme.Paddings
 import com.pjhn.stepcounter.ui.theme.colors
+import java.util.Locale
 import kotlin.time.Duration
 
 private val SECTION_PADDING_HORIZONTAL = Paddings.extra
@@ -42,6 +53,20 @@ fun RecordDetailSection(
     mainState: MainState,
     stepRecord: State<StepRecord>
 ) {
+    val isMeasuring = mainState is MainState.Measuring
+    val scale = remember { Animatable(1f) }
+    var prevMeasuringState by remember { mutableStateOf(isMeasuring) }
+
+    LaunchedEffect(isMeasuring) {
+        if (prevMeasuringState != isMeasuring) {
+            scale.animateTo(
+                1.18f, animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+            )
+            scale.animateTo(1f)
+        }
+        prevMeasuringState = isMeasuring
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,8 +85,8 @@ fun RecordDetailSection(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CaloriesRow(mainState, stepRecord.value)
-                TimeRow(mainState, stepRecord.value)
+                CaloriesRow(mainState == MainState.Measuring, stepRecord.value, scale)
+                TimeRow(mainState == MainState.Measuring, stepRecord.value, scale)
             }
         }
     }
@@ -69,11 +94,10 @@ fun RecordDetailSection(
 
 @Composable
 private fun CaloriesRow(
-    mainState: MainState,
-    stepRecord: StepRecord
+    isMeasuring: Boolean,
+    stepRecord: StepRecord,
+    scale: Animatable<Float, *>
 ) {
-    val isMeasuring = mainState is MainState.Measuring
-
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -88,12 +112,16 @@ private fun CaloriesRow(
                 painter = if (isMeasuring) painterResource(id = R.drawable.ic_cal_active) else
                     painterResource(id = R.drawable.ic_cal),
                 contentDescription = if (isMeasuring) "Active Calories Icon" else "Calories Icon",
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
+                modifier = Modifier.graphicsLayer(
+                    scaleX = scale.value,
+                    scaleY = scale.value
+                )
             )
         }
         Spacer(modifier = Modifier.padding(Paddings.small))
         Text(
-            text = String.format("%.2f", stepRecord.calories),
+            text = String.format(Locale.getDefault(),"%.2f", stepRecord.calories),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.outline,
         )
@@ -108,11 +136,10 @@ private fun CaloriesRow(
 
 @Composable
 private fun TimeRow(
-    mainState: MainState,
-    stepRecord: StepRecord
+    isMeasuring: Boolean,
+    stepRecord: StepRecord,
+    scale: Animatable<Float, *>
 ) {
-    val isMeasuring = mainState is MainState.Measuring
-
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -127,7 +154,11 @@ private fun TimeRow(
                 imageVector = if (isMeasuring) ImageVector.vectorResource(id = R.drawable.ic_time_active) else
                     ImageVector.vectorResource(id = R.drawable.ic_time),
                 contentDescription = if (isMeasuring) "Active Time Icon" else "Time Icon",
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
+                modifier = Modifier.graphicsLayer(
+                    scaleX = scale.value,
+                    scaleY = scale.value
+                )
             )
         }
         Spacer(modifier = Modifier.padding(Paddings.small))
@@ -145,5 +176,5 @@ fun formatDuration(duration: Duration?): String {
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
     val seconds = totalSeconds % 60
-    return "${hours}h ${minutes}m ${seconds}s".format(hours, minutes, seconds)
+    return "${hours}h ${minutes}m ${seconds}s"
 }
