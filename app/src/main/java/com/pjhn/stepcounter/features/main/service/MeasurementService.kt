@@ -31,6 +31,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
@@ -140,6 +141,15 @@ class MeasurementService : Service(), SensorEventListener {
         isServiceRunning = false
         super.onDestroy()
     }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        runBlocking {
+            userRecordRepository.saveUserRecord(StepRecord(stepCount = stepFlow.value))
+        }
+        stopSelf()
+        super.onTaskRemoved(rootIntent)
+    }
+
 
     private fun startForegroundService() {
         val channelId = CHANNEL_ID
