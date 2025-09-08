@@ -57,6 +57,10 @@ dependencies {
     //android
     implementation(libs.androidx.appcompat)
 
+    //review
+    implementation(libs.review)
+    implementation(libs.review.ktx)
+
     //glance
     implementation(libs.glance.appwidget)
     implementation(libs.glance.material3)
