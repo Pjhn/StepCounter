@@ -11,22 +11,34 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 class UserRecordRepository @Inject constructor(
-    private val stepRecordDao: StepRecordDao
+    private val stepRecordDao: StepRecordDao,
+    private val stepGoalRepository: StepGoalRepository
 ) : IUserRecordRepository {
 
     override val userRecord = stepRecordDao.getLatestStepRecord().map { entity ->
         entity?.toDomain() ?: StepRecord()
     }
 
+    override val userRecordsProgress =
+        stepRecordDao.getStepRecords().map { list ->
+            list.orEmpty()
+                .map { entity ->
+                    val progress = if (entity.stepGoal > 0) entity.stepCount / entity.stepGoal.toFloat() else 0f
+                    entity.date to progress.coerceIn(0f, 1f)
+                }
+        }
+
     override suspend fun initializeTodayRecord() {
         val now = LocalDate.now()
         val latestEntity = stepRecordDao.getLatestStepRecord().firstOrNull()
-        val daysGap = if (latestEntity != null) ChronoUnit.DAYS.between(latestEntity.date, now) else -1
+        val daysGap =
+            if (latestEntity != null) ChronoUnit.DAYS.between(latestEntity.date, now) else -1
 
         if (latestEntity == null || daysGap >= 1) {
             val entity = StepRecordEntity(
                 date = now,
-                stepCount = 0
+                stepCount = 0,
+                stepGoal = stepGoalRepository.getGoal()
             )
             stepRecordDao.upsert(entity)
         }
@@ -36,7 +48,8 @@ class UserRecordRepository @Inject constructor(
         val now = LocalDate.now()
         val entity = StepRecordEntity(
             date = now,
-            stepCount = record.stepCount ?: 0
+            stepCount = record.stepCount ?: 0,
+            stepGoal = stepGoalRepository.getGoal()
         )
         stepRecordDao.upsert(entity)
     }

@@ -6,6 +6,9 @@ import java.time.LocalDate
 
 interface IUserRecordRepository {
     val userRecord: Flow<StepRecord>
+
+    val userRecordsProgress: Flow<List<Pair<LocalDate, Float>>>
+
     suspend fun saveUserRecord(record: StepRecord)
 
     suspend fun initializeTodayRecord()

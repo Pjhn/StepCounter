@@ -15,6 +15,9 @@ interface StepRecordDao {
     @Query("SELECT * FROM step_record ORDER BY date DESC LIMIT 1")
     fun getLatestStepRecord(): Flow<StepRecordEntity?>
 
+    @Query("SELECT * FROM step_record ORDER BY date ASC")
+    fun getStepRecords(): Flow<List<StepRecordEntity>?>
+
     @Query("SELECT * FROM step_record WHERE date BETWEEN :startDate AND :endDate GROUP BY date ORDER BY date ASC")
     suspend fun getStepRecords(startDate: LocalDate, endDate: LocalDate): List<StepRecordEntity>?
 }
