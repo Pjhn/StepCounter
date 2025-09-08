@@ -93,7 +93,9 @@ fun RecordScreen(
                     )
                 },
                 id = R.string.rate_on_play_store
-            ) { }
+            ) {
+                input.openPlayStore()
+            }
         }
     }
 }

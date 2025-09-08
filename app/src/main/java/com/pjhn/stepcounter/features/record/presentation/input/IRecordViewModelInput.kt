@@ -9,4 +9,6 @@ interface IRecordViewModelInput {
     fun selectCategory(category: RecordCategories)
 
     fun selectDuration(duration: Duration)
+
+    fun openPlayStore()
 }

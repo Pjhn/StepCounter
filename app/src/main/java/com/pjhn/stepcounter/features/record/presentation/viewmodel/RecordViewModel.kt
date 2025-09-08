@@ -104,4 +104,12 @@ class RecordViewModel @Inject constructor(
             _selectedDuration.value = duration
         }
     }
+
+    override fun openPlayStore() {
+        viewModelScope.launch {
+            _recordUiEffect.emit(
+                RecordUiEffect.OpenPlayStore
+            )
+        }
+    }
 }

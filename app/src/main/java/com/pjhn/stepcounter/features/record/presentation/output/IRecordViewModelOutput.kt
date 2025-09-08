@@ -10,4 +10,6 @@ interface IRecordViewModelOutput {
 
 sealed class RecordUiEffect {
     object Back : RecordUiEffect()
+
+    object OpenPlayStore : RecordUiEffect()
 }
