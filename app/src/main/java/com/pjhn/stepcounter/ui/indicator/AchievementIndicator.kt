@@ -17,7 +17,7 @@ import com.pjhn.stepcounter.ui.theme.colors
 fun AchievementIndicator(
     progress: Float,
     size: Dp = 64.dp,
-    stroke: Dp = 10.dp,
+    stroke: Dp = 8.dp,
     label: String? = null
 ) {
     Box(

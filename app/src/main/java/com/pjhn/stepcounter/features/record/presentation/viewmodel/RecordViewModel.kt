@@ -9,6 +9,7 @@ import com.pjhn.stepcounter.features.common.repository.StepGoalRepository
 import com.pjhn.stepcounter.features.record.domain.enums.RecordCategories
 import com.pjhn.stepcounter.features.record.domain.enums.RecordCategories.*
 import com.pjhn.stepcounter.features.record.domain.usecase.GetRecordsForPeriodUseCase
+import com.pjhn.stepcounter.features.record.domain.usecase.GetRecordsProgressUseCase
 import com.pjhn.stepcounter.features.record.domain.usecase.GetStepGoalUseCase
 import com.pjhn.stepcounter.features.record.domain.usecase.GetStepRecordUseCase
 import com.pjhn.stepcounter.features.record.presentation.input.IRecordViewModelInput
@@ -31,6 +32,7 @@ class RecordViewModel @Inject constructor(
     private val getRecordsForPeriodUseCase: GetRecordsForPeriodUseCase,
     private val getStepGoalUseCase: GetStepGoalUseCase,
     private val getStepRecordUseCase: GetStepRecordUseCase,
+    private val getRecordsProgressUseCase: GetRecordsProgressUseCase
 ) : ViewModel(), IRecordViewModelInput, IRecordViewModelOutput {
 
     val output: IRecordViewModelOutput = this
@@ -68,6 +70,12 @@ class RecordViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = StepGoalRepository.Keys.DEFAULT_GOAL
         )
+
+    val recordsProgress: StateFlow<List<Pair<LocalDate, Float>>> = getRecordsProgressUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
 
     init {
         viewModelScope.launch {

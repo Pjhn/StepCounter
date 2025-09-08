@@ -28,9 +28,11 @@ import com.pjhn.stepcounter.features.record.presentation.screen.components.Chart
 import com.pjhn.stepcounter.features.record.presentation.screen.components.DurationButtonSection
 import com.pjhn.stepcounter.features.record.presentation.screen.components.RecordTopAppBar
 import com.pjhn.stepcounter.features.record.presentation.screen.components.TotalSection
+import com.pjhn.stepcounter.features.record.presentation.screen.components.AchievementCalendarSection
 import com.pjhn.stepcounter.ui.components.button.SecondaryWideButton
 import com.pjhn.stepcounter.ui.theme.Paddings
 import com.pjhn.stepcounter.ui.theme.colors
+import java.time.LocalDate
 
 
 @Composable
@@ -39,6 +41,7 @@ fun RecordScreen(
     selectedCategory: State<RecordCategories>,
     selectedDuration: State<Duration>,
     chartRecords: State<List<StepRecord>>,
+    recordsProgress: State<List<Pair<LocalDate, Float>>>,
     stepRecord: State<StepRecord>,
     stepGoal: State<Int>,
     input: IRecordViewModelInput,
@@ -76,6 +79,9 @@ fun RecordScreen(
             AchievementSection(
                 stepRecord = stepRecord,
                 stepGoal = stepGoal,
+            )
+            AchievementCalendarSection(
+                recordsProgress = recordsProgress
             )
             SecondaryWideButton(
                 icon = {
