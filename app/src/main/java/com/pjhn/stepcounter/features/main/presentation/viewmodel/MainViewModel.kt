@@ -126,6 +126,11 @@ class MainViewModel @Inject constructor(
     override fun updateStepGoal(stepGoal: Int) {
         viewModelScope.launch {
             stepGoalRepository.updateGoal(stepGoal)
+            userRecordRepository.saveUserRecord(
+                StepRecord(
+                    stepCount = stepRecord.value.stepCount,
+                )
+            )
         }
     }
 }
