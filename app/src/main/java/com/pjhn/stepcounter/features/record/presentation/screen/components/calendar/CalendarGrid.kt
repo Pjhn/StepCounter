@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 @Composable
 fun CalendarGrid(
-    date: List<Pair<LocalDate, Boolean>>,
+    date: List<Pair<LocalDate, Float>>,
     onClick: (LocalDate) -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -24,7 +24,7 @@ fun CalendarGrid(
         }
         date.forEach {
             CalendarCell(
-                date = it.first, isMarked = it.second, onClick = { onClick(it.first) },
+                date = it.first, progress = it.second, onClick = { onClick(it.first) },
                 modifier = Modifier
             )
         }

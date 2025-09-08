@@ -1,7 +1,6 @@
 package com.pjhn.stepcounter.features.record.presentation.screen.components.calendar
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +26,7 @@ import java.util.Locale
 @Composable
 fun CalendarView(
     month: LocalDate,
-    date: List<Pair<LocalDate, Boolean>>?,
+    date: List<Pair<LocalDate, Float>>?,
     displayNext: Boolean,
     displayPrev: Boolean,
     onClickNext: () -> Unit,
