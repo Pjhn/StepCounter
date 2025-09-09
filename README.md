@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://github.com/user-attachments/assets/89c2d951-0eca-4519-99ed-ebe4725e9c0f" width="30%" />
   <img src="https://github.com/user-attachments/assets/41c8aa59-b40a-4603-82e0-05efd57afe9c" width="30%" />
-  <img src="https://github.com/user-attachments/assets/48695089-11fa-489a-91a8-1ecc54b1c896" width="30%" />
+  <img src="https://github.com/user-attachments/assets/6eeefc9f-2415-43b0-8503-f9bb321b2da2" width="30%" />
 </p>
 
 
@@ -23,6 +23,8 @@
 - **기록 화면**:
   - 차트(걸음 수, 칼로리 소모량, 이동 시간, 이동 거리)
   - 기간 별 통계(걸음 수, 칼로리 소모량, 이동 시간, 이동 거리)
+  - 일일 걸음 목표 달성 현황 확인 가능
+  - 커스텀 캘린더에서 목표 달성 기록 확인 가능 
 
 
 ## Library
