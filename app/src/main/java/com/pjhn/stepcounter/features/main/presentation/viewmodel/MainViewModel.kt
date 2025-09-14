@@ -40,6 +40,11 @@ class MainViewModel @Inject constructor(
     override val sensorState: StateFlow<SensorState>
         get() = _sensorState
 
+    private val _openDialogState: MutableStateFlow<Boolean> =
+        MutableStateFlow(false)
+    val openDialogState: StateFlow<Boolean>
+        get() = _openDialogState
+
     private val _mainUiEffect = MutableSharedFlow<MainUiEffect>()
     override val mainUiEffect: SharedFlow<MainUiEffect>
         get() = _mainUiEffect
@@ -83,7 +88,6 @@ class MainViewModel @Inject constructor(
 
     override fun startMeasurement() {
         viewModelScope.launch {
-            updateMainState(MainState.Measuring)
             _mainUiEffect.emit(
                 MainUiEffect.StartMeasurement
             )
@@ -92,7 +96,6 @@ class MainViewModel @Inject constructor(
 
     override fun pauseMeasurement() {
         viewModelScope.launch {
-            updateMainState(MainState.Main)
             _mainUiEffect.emit(
                 MainUiEffect.PauseMeasurement
             )
@@ -131,6 +134,12 @@ class MainViewModel @Inject constructor(
                     stepCount = stepRecord.value.stepCount,
                 )
             )
+        }
+    }
+
+    override fun togglePermissionDialog(open: Boolean) {
+        viewModelScope.launch {
+            _openDialogState.value = open
         }
     }
 }

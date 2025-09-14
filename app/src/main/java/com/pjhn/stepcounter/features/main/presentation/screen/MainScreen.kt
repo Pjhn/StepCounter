@@ -28,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +45,8 @@ import com.pjhn.stepcounter.features.main.presentation.screen.components.RecordD
 import com.pjhn.stepcounter.features.main.presentation.screen.components.StepCountSection
 import com.pjhn.stepcounter.features.main.presentation.screen.components.StepGoalSection
 import com.pjhn.stepcounter.ui.dialog.NumberInputDialog
+import com.pjhn.stepcounter.ui.dialog.PermissionDialog
+import com.pjhn.stepcounter.util.PermissionUtils
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -55,11 +58,13 @@ fun MainScreen(
     sensorStateHolder: State<SensorState>,
     input: IMainViewModelInput,
     stepRecord: State<StepRecord>,
-    stepGoal: State<Int>
+    stepGoal: State<Int>,
+    openPermissionDialog: State<Boolean>
 ) {
     var openAlertDialog by remember { mutableStateOf(false) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -108,6 +113,17 @@ fun MainScreen(
                 }
             )
         }
+
+        if (openPermissionDialog.value) {
+            PermissionDialog(
+                permissions = PermissionUtils.permissionsToRequest,
+                onConfirm = {
+                    PermissionUtils.openSettings(context)
+                    input.togglePermissionDialog(true)
+                },
+                onDismiss = { input.togglePermissionDialog(false) },
+            )
+        }
     }
 }
 
@@ -117,7 +133,7 @@ fun MainContent(
     input: IMainViewModelInput,
     stepRecord: State<StepRecord>,
     stepGoal: State<Int>,
-    onEditGoal: ()->Unit,
+    onEditGoal: () -> Unit,
     paddingValues: PaddingValues
 ) {
     Column(
@@ -168,9 +184,10 @@ fun ModalContent(
             shape = RoundedCornerShape(12.dp),
             badge = {
                 Icon(
-                painter = painterResource(R.drawable.ic_add_small),
-                contentDescription = "Add Widget Icon", tint = Color.Unspecified,
-            ) },
+                    painter = painterResource(R.drawable.ic_add_small),
+                    contentDescription = "Add Widget Icon", tint = Color.Unspecified,
+                )
+            },
             onClick = { input.requestWidget() }
         )
 

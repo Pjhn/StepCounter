@@ -12,4 +12,6 @@ interface IMainViewModelInput {
     fun requestWidget()
 
     fun updateStepGoal(stepGoal: Int)
+
+    fun togglePermissionDialog(open: Boolean)
 }

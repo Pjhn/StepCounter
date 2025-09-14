@@ -1,11 +1,8 @@
 package com.pjhn.stepcounter.features.main
 
-import android.Manifest
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +10,6 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -29,6 +25,7 @@ import com.pjhn.stepcounter.features.main.service.MeasurementService
 import com.pjhn.stepcounter.features.widget.StepCountWidgetReceiver
 import com.pjhn.stepcounter.ui.navigation.safeNavigate
 import com.pjhn.stepcounter.ui.theme.StepCounterAppTheme
+import com.pjhn.stepcounter.util.PermissionUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -37,7 +34,7 @@ import kotlinx.coroutines.launch
 class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModels()
 
-    private val permissionLauncher = registerForActivityResult(
+    val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) {}
 
@@ -61,7 +58,8 @@ class MainFragment : Fragment() {
                         sensorStateHolder = viewModel.sensorState.collectAsState(),
                         input = viewModel.input,
                         stepRecord = viewModel.stepRecord.collectAsState(),
-                        stepGoal = viewModel.stepGoal.collectAsState()
+                        stepGoal = viewModel.stepGoal.collectAsState(),
+                        openPermissionDialog = viewModel.openDialogState.collectAsState()
                     )
                 }
             }
@@ -70,19 +68,25 @@ class MainFragment : Fragment() {
 
     private fun observeUiEffects() {
         val navController = findNavController()
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.output.mainUiEffect.collectLatest {
                     when (it) {
                         is MainUiEffect.StartMeasurement -> {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            if (PermissionUtils.hasPermissions(requireContext())) {
+                                updateMainState(MainState.Measuring)
                                 requireContext().startForegroundService(sensorIntent())
+
+                            } else if (PermissionUtils.hasDeniedPermission(requireActivity())) {
+                                togglePermissionDialog(true)
                             } else {
-                                requireContext().startService(sensorIntent())
+                                PermissionUtils.requestPermissions(permissionLauncher)
                             }
                         }
 
                         is MainUiEffect.PauseMeasurement -> {
+                            updateMainState(MainState.Main)
                             requireContext().stopService(sensorIntent())
                         }
 
@@ -95,7 +99,7 @@ class MainFragment : Fragment() {
                         is MainUiEffect.UpdateSensorDelay -> {
                             updateSensorState()
 
-                            if(MeasurementService.isServiceRunning){
+                            if (MeasurementService.isServiceRunning) {
                                 requireContext().startService(sensorIntent())
                             }
                         }
@@ -110,44 +114,25 @@ class MainFragment : Fragment() {
     }
 
     private fun requestPermissions() {
-        val permissionsToRequest = mutableListOf<String>()
-
-        // ACTIVITY_RECOGNITION 권한 (Android 10 이상)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACTIVITY_RECOGNITION
-                )
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissionsToRequest.add(Manifest.permission.ACTIVITY_RECOGNITION)
-            }
-        }
-
-        // POST_NOTIFICATIONS 권한 (Android 13 이상)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.POST_NOTIFICATIONS
-                )
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
-
-        if (permissionsToRequest.isNotEmpty()) {
-            permissionLauncher.launch(permissionsToRequest.toTypedArray())
-        }
+        if (PermissionUtils.hasPermissions(requireContext())) return
+        PermissionUtils.requestPermissions(permissionLauncher)
     }
 
-    private fun updateSensorState(){
+    private fun updateSensorState() {
         viewModel.updateSensorState()
     }
 
-    private fun sensorIntent(): Intent{
+    private fun updateMainState(state: MainState) {
+        viewModel.updateMainState(state)
+    }
+
+    private fun togglePermissionDialog(open: Boolean){
+        viewModel.togglePermissionDialog(open)
+    }
+
+    private fun sensorIntent(): Intent {
         return Intent(requireContext(), MeasurementService::class.java).apply {
-            action = when (viewModel.sensorState.value){
+            action = when (viewModel.sensorState.value) {
                 SensorState.DelayLow -> MeasurementService.SENSOR_DELAY_LOW
                 SensorState.DelayHigh -> MeasurementService.SENSOR_DELAY_HIGH
             }
