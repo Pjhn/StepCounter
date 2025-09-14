@@ -12,6 +12,7 @@
     <string name="calories_unit">kcal</string>
     <string name="sensor_delay">Sensor Delay</string>
     <string name="steps">STEPS</string>
+    <string name="steps_lower">Steps</string>
     <string name="distance_unit">m</string>
     <string name="notification_body">Measuring steps</string>
     <string name="settings">Settings</string>

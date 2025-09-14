@@ -15,6 +15,7 @@ import android.hardware.SensorManager
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.glance.appwidget.GlanceAppWidgetManager
@@ -42,6 +43,8 @@ class MeasurementService : Service(), SensorEventListener {
 
     @Inject
     lateinit var userRecordRepository: IUserRecordRepository
+
+    private lateinit var notificationManager: NotificationManager
 
     private var stepCounterSensor: Sensor? = null
 
@@ -77,6 +80,7 @@ class MeasurementService : Service(), SensorEventListener {
                 .collect{steps ->
                     userRecordRepository.saveUserRecord(StepRecord(stepCount = steps))
                     updateWidget(this@MeasurementService, steps)
+                    updateNotification(steps)
                 }
         }
 
@@ -146,41 +150,47 @@ class MeasurementService : Service(), SensorEventListener {
         runBlocking {
             userRecordRepository.saveUserRecord(StepRecord(stepCount = stepFlow.value))
         }
-        stopSelf()
         super.onTaskRemoved(rootIntent)
     }
 
 
     private fun startForegroundService() {
-        val channelId = CHANNEL_ID
-        val channelName = CHANNEL_NAME
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as
+                NotificationManager
+        notificationManager.createNotificationChannel(channel)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as
-                    NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        startForeground(1, buildNotification(stepFlow.value))
+    }
+
+    private fun buildNotification(steps: Int): Notification {
+        val content = RemoteViews(packageName, R.layout.notification_steps).apply{
+            setTextViewText(R.id.tv_step_count, "$steps")
         }
-
         val notificationIntent = Intent(this, MainActivity::class.java)
+
         val pendingIntent = PendingIntent.getActivity(
             this, 0, notificationIntent,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else 0
         )
 
-        val notification: Notification = NotificationCompat.Builder(this, channelId)
+        return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_time)
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText(getString(R.string.notification_body))
-            .setContentIntent(pendingIntent)
+            .setCustomContentView(content)
+            .setOngoing(true) // 스와이프 삭제 방지
+            .setOnlyAlertOnce(true) // 값 업데이트 시 재알림 소리 x
+            .setSilent(true) // 진동, 소리 x
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
             .build()
+    }
 
-        startForeground(1, notification)
+    private fun updateNotification(steps: Int){
+        notificationManager.notify(1, buildNotification(steps))
     }
 
     companion object {
