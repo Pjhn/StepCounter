@@ -29,9 +29,7 @@ import com.pjhn.stepcounter.features.record.presentation.screen.components.Durat
 import com.pjhn.stepcounter.features.record.presentation.screen.components.RecordTopAppBar
 import com.pjhn.stepcounter.features.record.presentation.screen.components.TotalSection
 import com.pjhn.stepcounter.features.record.presentation.screen.components.AchievementCalendarSection
-import com.pjhn.stepcounter.ui.components.button.SecondaryWideButton
 import com.pjhn.stepcounter.ui.theme.Paddings
-import com.pjhn.stepcounter.ui.theme.colors
 import java.time.LocalDate
 
 
@@ -83,19 +81,6 @@ fun RecordScreen(
             AchievementCalendarSection(
                 recordsProgress = recordsProgress
             )
-            SecondaryWideButton(
-                icon = {
-                    Icon(
-                        modifier = Modifier.size(18.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_star),
-                        contentDescription = "Play Icon",
-                        tint = MaterialTheme.colors.defaultTextButton
-                    )
-                },
-                id = R.string.rate_on_play_store
-            ) {
-                input.openPlayStore()
-            }
         }
     }
 }
