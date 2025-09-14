@@ -34,7 +34,7 @@ fun NumberInputDialog(
         confirmButton = {
             TextButton(enabled = isValid, onClick = { onConfirm(text.toInt()) }) {
                 Text(
-                    text = "Setting",
+                    text = "Confirm",
                     style = MaterialTheme.typography.labelLarge,
                 )
             }
