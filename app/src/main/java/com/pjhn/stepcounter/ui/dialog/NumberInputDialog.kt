@@ -33,12 +33,18 @@ fun NumberInputDialog(
         },
         confirmButton = {
             TextButton(enabled = isValid, onClick = { onConfirm(text.toInt()) }) {
-                Text("Confirm")
+                Text(
+                    text = "Setting",
+                    style = MaterialTheme.typography.labelLarge,
+                )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(
+                    text = "Cancel",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         },
         onDismissRequest = onDismiss,

@@ -39,7 +39,7 @@ fun PermissionDialog(
             TextButton(onClick = onConfirm) {
                 Text(
                     text = "Confirm",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.labelLarge,
                 )
             }
         },
