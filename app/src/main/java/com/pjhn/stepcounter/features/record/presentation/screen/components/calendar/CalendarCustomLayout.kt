@@ -10,12 +10,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CalendarCustomLayout(
     modifier: Modifier = Modifier,
-    horizonatalGapDp: Dp = 4.dp,
+    horizontalGapDp: Dp = 4.dp,
     verticalGapDp: Dp = 4.dp,
     content: @Composable () -> Unit
 ) {
     val horizontalGap = with(LocalDensity.current) {
-        horizonatalGapDp.roundToPx()
+        horizontalGapDp.roundToPx()
     }
     val verticalGap = with(LocalDensity.current) {
         verticalGapDp.roundToPx()

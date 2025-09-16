@@ -119,7 +119,7 @@ fun MainScreen(
                 permissions = PermissionUtils.permissionsToRequest,
                 onConfirm = {
                     PermissionUtils.openSettings(context)
-                    input.togglePermissionDialog(true)
+                    input.togglePermissionDialog(false)
                 },
                 onDismiss = { input.togglePermissionDialog(false) },
             )

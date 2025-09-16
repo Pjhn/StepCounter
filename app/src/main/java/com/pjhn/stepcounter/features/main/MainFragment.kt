@@ -54,9 +54,9 @@ class MainFragment : Fragment() {
             setContent {
                 StepCounterAppTheme {
                     MainScreen(
+                        input = viewModel.input,
                         mainStateHolder = viewModel.mainState.collectAsState(),
                         sensorStateHolder = viewModel.sensorState.collectAsState(),
-                        input = viewModel.input,
                         stepRecord = viewModel.stepRecord.collectAsState(),
                         stepGoal = viewModel.stepGoal.collectAsState(),
                         openPermissionDialog = viewModel.openDialogState.collectAsState()
