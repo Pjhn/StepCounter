@@ -20,7 +20,7 @@ fun WeeklyBarChart(
 
     val days = (0..6).map { weekStart.plusDays(it.toLong()) }
 
-    val xLabels = listOf("Sun", "Mon", "Tue", "Wen", "Thu", "Fri", "Sat")
+    val xValues = listOf("Sun", "Mon", "Tue", "Wen", "Thu", "Fri", "Sat")
 
     val yValues = days.map { day ->
         if (day <= today) {
@@ -37,7 +37,7 @@ fun WeeklyBarChart(
 
     DefaultBarChart(
         modifier = modifier,
-        xLabels = xLabels,
+        xValues = xValues,
         yValues = yValues
     )
 }

@@ -22,7 +22,7 @@ fun MonthlyBarChart(
         .sorted()
 
     val formatter = DateTimeFormatter.ofPattern("MM/dd")
-    val xLabels =
+    val xValues =
         previousWeeks.map { it.format(formatter) }
 
     val weeklyData = records.filter { it.date != null }
@@ -45,7 +45,7 @@ fun MonthlyBarChart(
 
     DefaultBarChart(
         modifier = modifier,
-        xLabels = xLabels,
+        xValues = xValues,
         yValues = yValues
     )
 }

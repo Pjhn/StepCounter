@@ -21,7 +21,7 @@ private val CHART_HEIGHT = 120.dp
 @Composable
 fun DefaultBarChart(
     modifier: Modifier = Modifier,
-    xLabels: List<String>,
+    xValues: List<String>,
     yValues: List<Float>
 ) {
     AndroidView(
@@ -30,14 +30,14 @@ fun DefaultBarChart(
             .height(CHART_HEIGHT),
         factory = { context ->
             BarChart(context).apply {
-                configureChart(xLabels)
+                configureChart(xValues, yValues)
                 data = createBarData(yValues)
                 animateY(1000)
                 invalidate()
             }
         },
         update = { chart ->
-            chart.configureChart(xLabels)
+            chart.configureChart(xValues, yValues)
             chart.data = createBarData(yValues)
             chart.notifyDataSetChanged()
             chart.invalidate()
@@ -45,7 +45,7 @@ fun DefaultBarChart(
     )
 }
 
-private fun BarChart.configureChart(xLabels: List<String>) {
+private fun BarChart.configureChart(xLabels: List<String>, yLabels: List<Float>) {
     description = Description().apply { text = "" }
 
     legend.isEnabled = false
@@ -65,8 +65,21 @@ private fun BarChart.configureChart(xLabels: List<String>) {
         setGridColor(Color.parseColor("#80CCCCCC"))
         setGridLineWidth(0.5f)
         setDrawAxisLine(false)
-        setLabelCount(4, true)
 
+        val maxY = yLabels.max()
+        val interval = when {
+            maxY <= 0.1f -> 0.02f
+            maxY <= 1f -> 0.2f
+            maxY <= 10f -> 2f
+            maxY <= 100f -> 20f
+            maxY <= 1_000f -> 200f
+            maxY <= 10_000f -> 2_000f
+            maxY <= 100_000f -> 20_000f
+            maxY <= 1_000_000f -> 200_000f
+            else -> 500_000f
+        }
+
+        granularity = interval
         axisMinimum = 0f
         textColor = Color.parseColor("#99363636")
     }

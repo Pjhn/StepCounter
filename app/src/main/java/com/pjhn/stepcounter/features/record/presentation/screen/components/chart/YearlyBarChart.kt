@@ -42,14 +42,14 @@ fun YearlyBarChart(
     }
 
     val formatter = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)
-    val xLabels =
+    val xValues =
         monthStarts.map { it.format(formatter) }
     val yValues = monthStarts.map { monthlyData[it] ?: 0f }
 
 
     DefaultBarChart(
         modifier = modifier,
-        xLabels = xLabels,
+        xValues = xValues,
         yValues = yValues
     )
 }
