@@ -48,7 +48,7 @@ fun CalendarCell(
         }
         Text(
             text = date.dayOfMonth.toString(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = if (progress > 0) MaterialTheme.typography.titleSmall else MaterialTheme.typography.bodyMedium,
             color = if (progress > 0) MaterialTheme.colorScheme.outline else
                 MaterialTheme.colors.defaultTextButton,
             modifier = Modifier.align(Alignment.Center),

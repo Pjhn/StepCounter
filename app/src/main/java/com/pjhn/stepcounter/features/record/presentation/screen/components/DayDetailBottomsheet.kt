@@ -21,6 +21,7 @@ import com.pjhn.stepcounter.features.common.model.StepRecord
 import com.pjhn.stepcounter.ui.components.button.PrimaryButton
 import com.pjhn.stepcounter.ui.theme.Paddings
 import com.pjhn.stepcounter.ui.theme.colors
+import com.pjhn.stepcounter.util.DateFormatter
 import com.pjhn.stepcounter.util.TimeFormatter
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -36,7 +37,7 @@ fun DayDetailBottomsheet(
 ) {
     selectedDate?.let { selectedDate ->
         val steps = record?.stepCount ?: 0
-        val date = selectedDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.US))
+        val date = selectedDate.format(DateFormatter.iso)
 
         ModalBottomSheet(
             sheetState = sheetState,

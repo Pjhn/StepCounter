@@ -46,11 +46,10 @@ import com.pjhn.stepcounter.features.main.presentation.screen.components.StepCou
 import com.pjhn.stepcounter.features.main.presentation.screen.components.StepGoalSection
 import com.pjhn.stepcounter.ui.dialog.NumberInputDialog
 import com.pjhn.stepcounter.ui.dialog.PermissionDialog
+import com.pjhn.stepcounter.util.DateFormatter
 import com.pjhn.stepcounter.util.PermissionUtils
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
-private const val DATE_FMT_US = "MM/dd/yyyy"
 
 @Composable
 fun MainScreen(
@@ -84,7 +83,7 @@ fun MainScreen(
             topBar = {
                 MainTopAppBar(
                     title = LocalDateTime.now()
-                        .format(DateTimeFormatter.ofPattern(DATE_FMT_US)),
+                        .format(DateFormatter.iso),
                     input = input,
                     scope = scope,
                     drawerState = drawerState

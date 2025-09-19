@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.pjhn.stepcounter.R
 import com.pjhn.stepcounter.ui.components.button.CustomIconButton
+import com.pjhn.stepcounter.util.DateFormatter
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -52,7 +53,7 @@ fun CalendarView(
                 )
             }
             Text(
-                text = month.formatToMonthString(),
+                text = month.format(DateFormatter.monthYear()),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -81,6 +82,3 @@ fun CalendarView(
         }
     }
 }
-
-fun LocalDate.formatToMonthString(): String =
-    DateTimeFormatter.ofPattern("MMM", Locale.US).format(this)
