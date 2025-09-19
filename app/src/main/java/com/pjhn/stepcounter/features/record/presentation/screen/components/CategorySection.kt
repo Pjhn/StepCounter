@@ -32,11 +32,12 @@ private val CATEGORY_SECTION_SPACED_BY = Paddings.extra
 
 @Composable
 fun CategorySection(
+    modifier: Modifier = Modifier,
     selectedCategory: State<RecordCategories>,
     input: IRecordViewModelInput
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = CATEGORY_SECTION_PADDING_HORIZONTAL),
         horizontalArrangement = Arrangement.spacedBy(

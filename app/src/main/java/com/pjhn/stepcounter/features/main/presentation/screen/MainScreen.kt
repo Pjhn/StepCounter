@@ -49,7 +49,6 @@ import com.pjhn.stepcounter.ui.dialog.PermissionDialog
 import com.pjhn.stepcounter.util.DateFormatter
 import com.pjhn.stepcounter.util.PermissionUtils
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun MainScreen(
