@@ -50,6 +50,7 @@ fun RecordScreen(
     input: IRecordViewModelInput,
 ) {
     var sheetDate by remember { mutableStateOf<LocalDate?>(null) }
+    var sheetRecord by remember { mutableStateOf<StepRecord?>(null) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
@@ -91,6 +92,7 @@ fun RecordScreen(
                 recordsProgress = recordsProgress
             ) { clickedDate ->
                 sheetDate = clickedDate
+                sheetRecord = chartRecords.value.firstOrNull{ it.date == clickedDate }
             }
             Spacer(modifier = Modifier.padding(0.dp))
         }
@@ -98,7 +100,7 @@ fun RecordScreen(
     DayDetailBottomsheet(
         selectedDate = sheetDate,
         sheetState = sheetState,
-        record = stepRecord.value,
+        record = sheetRecord,
         onDismiss = {
             scope.launch {
                 sheetState.hide()
@@ -109,6 +111,5 @@ fun RecordScreen(
             }
         }
     )
-
 }
 
