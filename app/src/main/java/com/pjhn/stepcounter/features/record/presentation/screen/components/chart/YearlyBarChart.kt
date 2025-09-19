@@ -21,10 +21,10 @@ fun YearlyBarChart(
         .map { currentMonthStart.minusMonths(it.toLong()) }
         .sorted()
 
-    val monthStarts = listOf(currentMonthStart) + previousMonths
+    val monthStarts = previousMonths + listOf(currentMonthStart)
 
     val filteredRecords = records.filter {
-        it.date != null && monthStarts.contains(it.date!!.withDayOfMonth(1))
+        it.date != null && monthStarts.contains(it.date.withDayOfMonth(1))
     }
 
     val monthlyData = filteredRecords.groupBy { record ->
@@ -34,18 +34,16 @@ fun YearlyBarChart(
             when (selectedCategory) {
                 RecordCategories.STEP -> (record.stepCount ?: 0).toDouble()
                 RecordCategories.CALORIES -> record.calories ?: 0.0
-                RecordCategories.DISTANCE -> (record.distance ?: 0.0)/1000.0
+                RecordCategories.DISTANCE -> (record.distance ?: 0.0)
                 RecordCategories.TIME -> record.measurementTime?.inWholeSeconds?.toDouble()
                     ?: 0.0
             }
         }.toFloat()
     }
 
-    val formatter = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)
-    val xValues =
-        monthStarts.map { it.format(formatter) }
+    val formatter = DateTimeFormatter.ofPattern("MMM", Locale.US)
+    val xValues = monthStarts.map { it.format(formatter) }
     val yValues = monthStarts.map { monthlyData[it] ?: 0f }
-
 
     DefaultBarChart(
         modifier = modifier,
