@@ -13,6 +13,8 @@ import java.util.Locale
 fun YearlyBarChart(
     modifier: Modifier = Modifier,
     selectedCategory: RecordCategories,
+    showAvg: Boolean,
+    showDur: Boolean,
     records: List<StepRecord>
 ) {
     val currentMonthStart = LocalDate.now().withDayOfMonth(1)
@@ -48,6 +50,8 @@ fun YearlyBarChart(
     DefaultBarChart(
         modifier = modifier,
         xValues = xValues,
-        yValues = yValues
+        yValues = yValues,
+        showAvg = showAvg,
+        showDur = showDur
     )
 }

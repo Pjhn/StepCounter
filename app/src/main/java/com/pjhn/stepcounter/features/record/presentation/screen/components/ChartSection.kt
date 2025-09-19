@@ -15,6 +15,8 @@ fun ChartSection(
     modifier: Modifier = Modifier,
     selectedCategory: State<RecordCategories>,
     selectedDuration: State<Duration>,
+    showAvg: Boolean,
+    showDur: Boolean,
     records: State<List<StepRecord>>
 ) {
     when (selectedDuration.value) {
@@ -22,7 +24,9 @@ fun ChartSection(
             WeeklyBarChart(
                 modifier = modifier,
                 records = records.value,
-                selectedCategory = selectedCategory.value
+                selectedCategory = selectedCategory.value,
+                showAvg = showAvg,
+                showDur = showDur
             )
         }
 
@@ -30,7 +34,9 @@ fun ChartSection(
             MonthlyBarChart(
                 modifier = modifier,
                 records = records.value,
-                selectedCategory = selectedCategory.value
+                selectedCategory = selectedCategory.value,
+                showAvg = showAvg,
+                showDur = showDur
             )
         }
 
@@ -38,7 +44,9 @@ fun ChartSection(
             YearlyBarChart(
                 modifier = modifier,
                 records = records.value,
-                selectedCategory = selectedCategory.value
+                selectedCategory = selectedCategory.value,
+                showAvg = showAvg,
+                showDur = showDur
             )
         }
     }

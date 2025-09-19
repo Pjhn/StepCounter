@@ -14,6 +14,8 @@ import java.time.temporal.TemporalAdjusters
 fun MonthlyBarChart(
     modifier: Modifier = Modifier,
     selectedCategory: RecordCategories,
+    showAvg: Boolean,
+    showDur: Boolean,
     records: List<StepRecord>
 ) {
     val currentWeekStart = LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
@@ -46,6 +48,8 @@ fun MonthlyBarChart(
     DefaultBarChart(
         modifier = modifier,
         xValues = xValues,
-        yValues = yValues
+        yValues = yValues,
+        showAvg = showAvg,
+        showDur = showDur
     )
 }

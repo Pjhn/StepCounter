@@ -24,24 +24,24 @@ private val CHART_HEIGHT = 120.dp
 fun DefaultBarChart(
     modifier: Modifier = Modifier,
     xValues: List<String>,
-    yValues: List<Float>
+    yValues: List<Float>,
+    showAvg: Boolean = false,
+    showDur: Boolean = true
 ) {
-    val average = yValues.average().toFloat()
-
     AndroidView(
         modifier = modifier
             .fillMaxWidth()
             .height(CHART_HEIGHT),
         factory = { context ->
             BarChart(context).apply {
-                configureChart(xValues, yValues, average)
+                configureChart(xValues, yValues, showAvg, showDur)
                 data = createBarData(yValues)
                 animateY(1000)
                 invalidate()
             }
         },
         update = { chart ->
-            chart.configureChart(xValues, yValues, average)
+            chart.configureChart(xValues, yValues, showAvg, showDur)
             chart.data = createBarData(yValues)
             chart.notifyDataSetChanged()
             chart.invalidate()
@@ -49,7 +49,7 @@ fun DefaultBarChart(
     )
 }
 
-private fun BarChart.configureChart(xLabels: List<String>, yLabels: List<Float>, average: Float) {
+private fun BarChart.configureChart(xLabels: List<String>, yLabels: List<Float>, showAvg: Boolean, showDur: Boolean) {
     description = Description().apply { text = "" }
 
     legend.isEnabled = false
@@ -70,17 +70,36 @@ private fun BarChart.configureChart(xLabels: List<String>, yLabels: List<Float>,
         setGridColor(Color.parseColor("#80CCCCCC"))
         setGridLineWidth(0.5f)
         setDrawAxisLine(false)
+        setSpaceTop(17f)
         removeAllLimitLines()
-        val limitLine = LimitLine(average, "Avg ${numberFormatter(average)}").apply {
-            lineWidth = 1.5f
-            enableDashedLine(10f, 10f, 0f)
-            textSize = 9f
-            textColor = Color.parseColor("#99363636")
-            lineColor = Color.parseColor("#99363636")
-            labelPosition = LimitLine.LimitLabelPosition.LEFT_TOP
-            yOffset = 6f
+
+        if(showDur){
+            val durationAverage = yLabels.average().toFloat()
+            val durationAverageLimitLine = LimitLine(durationAverage, "Duration Avg ${numberFormatter(durationAverage)}").apply {
+                lineWidth = 1.5f
+                enableDashedLine(10f, 10f, 0f)
+                textSize = 9f
+                textColor = Color.parseColor("#99363636")
+                lineColor = Color.parseColor("#99363636")
+                labelPosition = LimitLine.LimitLabelPosition.LEFT_TOP
+                yOffset = 6f
+            }
+            addLimitLine(durationAverageLimitLine)
         }
-        addLimitLine(limitLine)
+
+        if(showAvg){
+            val average = yLabels.filter { it > 0f }.average().toFloat()
+            val averageLimitLine = LimitLine(average, "Avg ${numberFormatter(average)}").apply {
+                lineWidth = 1.5f
+                enableDashedLine(10f, 10f, 0f)
+                textSize = 9f
+                textColor = Color.parseColor("#99EC8F3D")
+                lineColor = Color.parseColor("#99EC8F3D")
+                labelPosition = LimitLine.LimitLabelPosition.LEFT_TOP
+                yOffset = 6f
+            }
+            addLimitLine(averageLimitLine)
+        }
 
         val maxY = yLabels.max()
         val interval = when {

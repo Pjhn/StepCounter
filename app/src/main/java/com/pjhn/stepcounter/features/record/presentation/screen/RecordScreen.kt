@@ -2,6 +2,7 @@ package com.pjhn.stepcounter.features.record.presentation.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -54,6 +55,10 @@ fun RecordScreen(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
+    var showAvg by remember { mutableStateOf(false) }
+    var showDur by remember { mutableStateOf(true) }
+
+
     Scaffold(
         topBar = {
             RecordTopAppBar(input)
@@ -65,30 +70,40 @@ fun RecordScreen(
                 .padding(paddingValues)
                 .padding(horizontal = Paddings.xxlarge)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(Paddings.xlarge)
+            verticalArrangement = Arrangement.spacedBy(Paddings.small)
         ) {
             CategorySection(
+                modifier = Modifier.padding(bottom = Paddings.xsmall),
                 selectedCategory = selectedCategory,
                 input = input
             )
             DurationButtonSection(
                 selectedDuration = selectedDuration,
+                showAvg = showAvg,
+                showDur = showDur,
+                onToggleAvg = { showAvg = !showAvg },
+                onToggleDur =  { showDur = !showDur },
                 input = input
             )
             ChartSection(
-                modifier = Modifier.padding(bottom = Paddings.small),
+                modifier = Modifier.padding(bottom = Paddings.xlarge),
                 selectedCategory = selectedCategory,
                 selectedDuration = selectedDuration,
+                showAvg = showAvg,
+                showDur = showDur,
                 records = chartRecords,
             )
             TotalSection(
+                modifier = Modifier.padding(bottom = Paddings.large),
                 records = chartRecords, selectedDuration = selectedDuration
             )
             AchievementSection(
+                modifier = Modifier.padding(bottom = Paddings.large),
                 stepRecord = stepRecord,
                 stepGoal = stepGoal,
             )
             AchievementCalendarSection(
+                modifier = Modifier.padding(bottom = Paddings.large),
                 recordsProgress = recordsProgress
             ) { clickedDate ->
                 sheetDate = clickedDate

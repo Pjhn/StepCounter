@@ -13,6 +13,8 @@ import java.time.temporal.TemporalAdjusters
 fun WeeklyBarChart(
     modifier: Modifier = Modifier,
     selectedCategory: RecordCategories,
+    showAvg: Boolean,
+    showDur: Boolean,
     records: List<StepRecord>
 ) {
     val today = LocalDate.now()
@@ -38,6 +40,8 @@ fun WeeklyBarChart(
     DefaultBarChart(
         modifier = modifier,
         xValues = xValues,
-        yValues = yValues
+        yValues = yValues,
+        showAvg = showAvg,
+        showDur = showDur
     )
 }
