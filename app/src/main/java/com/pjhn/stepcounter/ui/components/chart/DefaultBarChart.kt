@@ -1,6 +1,7 @@
 package com.pjhn.stepcounter.ui.components.chart
 
 import android.graphics.Color
+import android.icu.text.DecimalFormat
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -24,20 +26,22 @@ fun DefaultBarChart(
     xValues: List<String>,
     yValues: List<Float>
 ) {
+    val average = yValues.average().toFloat()
+
     AndroidView(
         modifier = modifier
             .fillMaxWidth()
             .height(CHART_HEIGHT),
         factory = { context ->
             BarChart(context).apply {
-                configureChart(xValues, yValues)
+                configureChart(xValues, yValues, average)
                 data = createBarData(yValues)
                 animateY(1000)
                 invalidate()
             }
         },
         update = { chart ->
-            chart.configureChart(xValues, yValues)
+            chart.configureChart(xValues, yValues, average)
             chart.data = createBarData(yValues)
             chart.notifyDataSetChanged()
             chart.invalidate()
@@ -45,7 +49,7 @@ fun DefaultBarChart(
     )
 }
 
-private fun BarChart.configureChart(xLabels: List<String>, yLabels: List<Float>) {
+private fun BarChart.configureChart(xLabels: List<String>, yLabels: List<Float>, average: Float) {
     description = Description().apply { text = "" }
 
     legend.isEnabled = false
@@ -66,6 +70,17 @@ private fun BarChart.configureChart(xLabels: List<String>, yLabels: List<Float>)
         setGridColor(Color.parseColor("#80CCCCCC"))
         setGridLineWidth(0.5f)
         setDrawAxisLine(false)
+        removeAllLimitLines()
+        val limitLine = LimitLine(average, "Avg ${numberFormatter(average)}").apply {
+            lineWidth = 1.5f
+            enableDashedLine(10f, 10f, 0f)
+            textSize = 9f
+            textColor = Color.parseColor("#99363636")
+            lineColor = Color.parseColor("#99363636")
+            labelPosition = LimitLine.LimitLabelPosition.LEFT_TOP
+            yOffset = 6f
+        }
+        addLimitLine(limitLine)
 
         val maxY = yLabels.max()
         val interval = when {
@@ -127,15 +142,9 @@ private fun numberFormatter(value: Float): String {
         value >= 1_000_000_000f -> value / 1_000_000_000f to "B"
         value >= 1_000_000f -> value / 1_000_000f to "M"
         value >= 1_000f -> value / 1_000f to "K"
-        else -> return if (value % 1f == 0f) value.toInt().toString() else String.format(
-            "%.1f",
-            value
-        )
+        else -> return if (value % 1f == 0f) value.toInt().toString() else
+            DecimalFormat("#.##").format(value)
     }
 
-    val numStr = if (number >= 10f || number % 1f == 0f)
-        String.format("%.0f", number)
-    else
-        String.format("%.2f", number)
-    return numStr + unit
+    return DecimalFormat("#.##").format(number) + unit
 }
