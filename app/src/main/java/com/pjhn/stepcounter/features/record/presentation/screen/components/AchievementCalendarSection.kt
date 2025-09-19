@@ -49,7 +49,7 @@ fun AchievementCalendarSection(
             displayPrev = true,
             onClickNext = { currentMonth = currentMonth.plusMonths(1) },
             onClickPrev = { currentMonth = currentMonth.minusMonths(1) },
-            onClick = { onClick },
+            onClick = onClick ,
             modifier = modifier
         )
     }

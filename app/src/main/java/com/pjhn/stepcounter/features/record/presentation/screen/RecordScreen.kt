@@ -2,21 +2,23 @@ package com.pjhn.stepcounter.features.record.presentation.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.pjhn.stepcounter.R
 import com.pjhn.stepcounter.features.common.model.StepRecord
 import com.pjhn.stepcounter.features.common.model.enums.Duration
 import com.pjhn.stepcounter.features.record.domain.enums.RecordCategories
@@ -29,10 +31,13 @@ import com.pjhn.stepcounter.features.record.presentation.screen.components.Durat
 import com.pjhn.stepcounter.features.record.presentation.screen.components.RecordTopAppBar
 import com.pjhn.stepcounter.features.record.presentation.screen.components.TotalSection
 import com.pjhn.stepcounter.features.record.presentation.screen.components.AchievementCalendarSection
+import com.pjhn.stepcounter.features.record.presentation.screen.components.DayDetailBottomsheet
 import com.pjhn.stepcounter.ui.theme.Paddings
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecordScreen(
     recordStateHolder: State<RecordState>,
@@ -44,6 +49,10 @@ fun RecordScreen(
     stepGoal: State<Int>,
     input: IRecordViewModelInput,
 ) {
+    var sheetDate by remember { mutableStateOf<LocalDate?>(null) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             RecordTopAppBar(input)
@@ -80,8 +89,26 @@ fun RecordScreen(
             )
             AchievementCalendarSection(
                 recordsProgress = recordsProgress
-            )
+            ) { clickedDate ->
+                sheetDate = clickedDate
+            }
+            Spacer(modifier = Modifier.padding(0.dp))
         }
     }
+    DayDetailBottomsheet(
+        selectedDate = sheetDate,
+        sheetState = sheetState,
+        record = stepRecord.value,
+        onDismiss = {
+            scope.launch {
+                sheetState.hide()
+            }.invokeOnCompletion {
+                if (!sheetState.isVisible) {
+                    sheetDate = null
+                }
+            }
+        }
+    )
+
 }
 
