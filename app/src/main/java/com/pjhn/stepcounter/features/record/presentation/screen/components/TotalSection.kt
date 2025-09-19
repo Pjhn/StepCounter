@@ -30,6 +30,7 @@ import com.pjhn.stepcounter.features.record.domain.enums.RecordCategories
 import com.pjhn.stepcounter.features.record.domain.enums.RecordCategories.*
 import com.pjhn.stepcounter.ui.theme.Paddings
 import com.pjhn.stepcounter.ui.theme.colors
+import com.pjhn.stepcounter.util.TimeFormatter
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
@@ -77,7 +78,7 @@ fun TotalSection(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_time_active),
             description = "Time icon",
             category = TIME,
-            text = formatTime(totalTimeSeconds)
+            text = TimeFormatter.formatTime(totalTimeSeconds)
         )
         Spacer(modifier = Modifier.padding(Paddings.medium))
         IconRow(
@@ -91,7 +92,7 @@ fun TotalSection(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_distance),
             description = "Distance icon",
             category = DISTANCE,
-            text = "${"%.2f".format(totalDistance/1000)} km"
+            text = "${"%.2f".format(totalDistance)} m"
         )
     }
 }
@@ -134,11 +135,4 @@ fun IconRow(
         )
         Spacer(modifier = Modifier.padding(Paddings.small))
     }
-}
-
-private fun formatTime(totalSeconds: Long): String {
-    val hours = totalSeconds / 3600
-    val minutes = (totalSeconds % 3600) / 60
-    val seconds = totalSeconds % 60
-    return "${hours}h ${minutes}m ${seconds}s"
 }
