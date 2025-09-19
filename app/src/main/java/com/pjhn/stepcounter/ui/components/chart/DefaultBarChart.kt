@@ -56,6 +56,7 @@ private fun BarChart.configureChart(xLabels: List<String>, yLabels: List<Float>)
         position = XAxis.XAxisPosition.BOTTOM
         setDrawGridLines(false)
         setDrawAxisLine(false)
+
         granularity = 1f
         valueFormatter = IndexAxisValueFormatter(xLabels)
     }
@@ -68,20 +69,27 @@ private fun BarChart.configureChart(xLabels: List<String>, yLabels: List<Float>)
 
         val maxY = yLabels.max()
         val interval = when {
-            maxY <= 0.1f -> 0.02f
-            maxY <= 1f -> 0.2f
+            maxY <= 0f -> 50f
             maxY <= 10f -> 2f
+            maxY <= 50f -> 10f
             maxY <= 100f -> 20f
-            maxY <= 1_000f -> 200f
-            maxY <= 10_000f -> 2_000f
-            maxY <= 100_000f -> 20_000f
-            maxY <= 1_000_000f -> 200_000f
-            else -> 500_000f
+            maxY <= 200f -> 20f
+            maxY <= 500f -> 50f
+            maxY <= 1_000f -> 100f
+            maxY <= 5_000f -> 500f
+            maxY <= 10_000f -> 1_000f
+            maxY <= 100_000f -> 10_000f
+            else -> 50_000f
         }
 
         granularity = interval
         axisMinimum = 0f
         textColor = Color.parseColor("#99363636")
+        valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String? {
+                return numberFormatter(value)
+            }
+        }
     }
     axisRight.isEnabled = false
 
@@ -101,8 +109,7 @@ private fun createBarData(yValues: List<Float>): BarData {
             override fun getBarLabel(barEntry: BarEntry?): String? {
                 if (barEntry == null) return ""
                 if (barEntry.y == 0f) return ""
-                return if (barEntry.y % 1f == 0f) barEntry.y.toInt().toString()
-                else String.format("%.2f", barEntry.y)
+                return numberFormatter(barEntry.y)
             }
         }
 
@@ -113,4 +120,22 @@ private fun createBarData(yValues: List<Float>): BarData {
         setDrawValues(true)
     }
     return BarData(dataSet).apply { barWidth = 0.6f }
+}
+
+private fun numberFormatter(value: Float): String {
+    val (number, unit) = when {
+        value >= 1_000_000_000f -> value / 1_000_000_000f to "B"
+        value >= 1_000_000f -> value / 1_000_000f to "M"
+        value >= 1_000f -> value / 1_000f to "K"
+        else -> return if (value % 1f == 0f) value.toInt().toString() else String.format(
+            "%.1f",
+            value
+        )
+    }
+
+    val numStr = if (number >= 10f || number % 1f == 0f)
+        String.format("%.0f", number)
+    else
+        String.format("%.2f", number)
+    return numStr + unit
 }
