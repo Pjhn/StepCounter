@@ -66,6 +66,11 @@ class MainFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.initializeTodayRecord()
+    }
+
     private fun observeUiEffects() {
         val navController = findNavController()
 

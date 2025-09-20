@@ -28,13 +28,20 @@ class UserRecordRepository @Inject constructor(
                 }
         }
 
+    override suspend fun isNewDay(): Boolean {
+        val latestEntity = stepRecordDao.getLatestStepRecord().firstOrNull()
+        val now = LocalDate.now()
+
+        if (latestEntity == null) return true
+        val daysGap =
+            ChronoUnit.DAYS.between(latestEntity.date, now)
+        return daysGap >= 1
+    }
+
     override suspend fun initializeTodayRecord() {
         val now = LocalDate.now()
-        val latestEntity = stepRecordDao.getLatestStepRecord().firstOrNull()
-        val daysGap =
-            if (latestEntity != null) ChronoUnit.DAYS.between(latestEntity.date, now) else -1
 
-        if (latestEntity == null || daysGap >= 1) {
+        if (isNewDay()) {
             val entity = StepRecordEntity(
                 date = now,
                 stepCount = 0,
@@ -46,12 +53,22 @@ class UserRecordRepository @Inject constructor(
 
     override suspend fun saveUserRecord(record: StepRecord) {
         val now = LocalDate.now()
-        val entity = StepRecordEntity(
-            date = now,
-            stepCount = record.stepCount ?: 0,
-            stepGoal = stepGoalRepository.getGoal()
-        )
-        stepRecordDao.upsert(entity)
+
+        if (isNewDay()) {
+            val entity = StepRecordEntity(
+                date = now,
+                stepCount = 0,
+                stepGoal = stepGoalRepository.getGoal()
+            )
+            stepRecordDao.upsert(entity)
+        }else {
+            val entity = StepRecordEntity(
+                date = now,
+                stepCount = record.stepCount ?: 0,
+                stepGoal = stepGoalRepository.getGoal()
+            )
+            stepRecordDao.upsert(entity)
+        }
     }
 
     override suspend fun getRecordsForPeriod(

@@ -29,6 +29,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -52,15 +54,17 @@ class MeasurementService : Service(), SensorEventListener {
 
     private val stepFlow = MutableStateFlow(0)
 
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action){
+        when (intent?.action) {
             SENSOR_DELAY_HIGH -> applySensorDelay(SensorManager.SENSOR_DELAY_NORMAL)
             SENSOR_DELAY_LOW -> applySensorDelay(SensorManager.SENSOR_DELAY_UI)
         }
         return super.onStartCommand(intent, flags, startId)
     }
 
-    private fun applySensorDelay(state: Int){
+    private fun applySensorDelay(state: Int) {
         sensorManager.unregisterListener(this)
         stepCounterSensor?.let {
             sensorManager.registerListener(this, it, state)
@@ -71,13 +75,15 @@ class MeasurementService : Service(), SensorEventListener {
         super.onCreate()
         isServiceRunning = true
 
-        CoroutineScope(Dispatchers.IO).launch {
+        serviceScope.launch {
+            if (userRecordRepository.isNewDay()) userRecordRepository.initializeTodayRecord()
+
             userRecordRepository.userRecord.firstOrNull()?.let {
                 stepFlow.value = it.stepCount ?: 0
             }
 
             stepFlow
-                .collect{steps ->
+                .collect { steps ->
                     userRecordRepository.saveUserRecord(StepRecord(stepCount = steps))
                     updateWidget(this@MeasurementService, steps)
                     updateNotification(steps)
@@ -87,7 +93,7 @@ class MeasurementService : Service(), SensorEventListener {
         startForegroundService()
     }
 
-    private fun registerSensor(state: Int){
+    private fun registerSensor(state: Int) {
         stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
         if (stepCounterSensor != null) {
             sensorManager.registerListener(
@@ -100,7 +106,7 @@ class MeasurementService : Service(), SensorEventListener {
         }
     }
 
-    private suspend fun updateWidget(context: Context, steps: Int){
+    private suspend fun updateWidget(context: Context, steps: Int) {
         val manager = GlanceAppWidgetManager(context)
         val ids = manager.getGlanceIds(StepCountWidget::class.java)
 
@@ -108,7 +114,7 @@ class MeasurementService : Service(), SensorEventListener {
             updateAppWidgetState(
                 context = context,
                 glanceId = id
-            ){ prefs: MutablePreferences ->
+            ) { prefs: MutablePreferences ->
                 prefs[StepCountWidget.TODAY_STEPS] = steps
             }
         }
@@ -116,11 +122,19 @@ class MeasurementService : Service(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type == Sensor.TYPE_STEP_COUNTER) {
-            val totalSteps = event.values[0]
+        if (event?.sensor?.type != Sensor.TYPE_STEP_COUNTER) return
+        val totalSteps = event.values[0]
+
+        serviceScope.launch {
+            if (userRecordRepository.isNewDay()) {
+                stepFlow.value = 0  // 오늘 기록 초기화
+                prevStepCount = -1f // 센서 기준점 초기화
+                userRecordRepository.saveUserRecord(StepRecord(stepCount = 0))
+            }
+
             if (prevStepCount < 0) {
                 prevStepCount = totalSteps
-                return
+                return@launch
             }
             val stepsSinceStart = (totalSteps - prevStepCount).toInt()
             Log.d(
@@ -142,6 +156,7 @@ class MeasurementService : Service(), SensorEventListener {
 
     override fun onDestroy() {
         sensorManager.unregisterListener(this)
+        serviceScope.cancel()
         isServiceRunning = false
         super.onDestroy()
     }
@@ -168,7 +183,7 @@ class MeasurementService : Service(), SensorEventListener {
     }
 
     private fun buildNotification(steps: Int): Notification {
-        val content = RemoteViews(packageName, R.layout.notification_steps).apply{
+        val content = RemoteViews(packageName, R.layout.notification_steps).apply {
             setTextViewText(R.id.tv_step_count, "$steps")
         }
         val notificationIntent = Intent(this, MainActivity::class.java)
@@ -189,7 +204,7 @@ class MeasurementService : Service(), SensorEventListener {
             .build()
     }
 
-    private fun updateNotification(steps: Int){
+    private fun updateNotification(steps: Int) {
         notificationManager.notify(1, buildNotification(steps))
     }
 

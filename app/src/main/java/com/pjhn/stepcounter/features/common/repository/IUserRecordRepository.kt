@@ -9,6 +9,8 @@ interface IUserRecordRepository {
 
     val userRecordsProgress: Flow<List<Pair<LocalDate, Float>>>
 
+    suspend fun isNewDay(): Boolean
+
     suspend fun saveUserRecord(record: StepRecord)
 
     suspend fun initializeTodayRecord()
