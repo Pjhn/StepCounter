@@ -64,6 +64,10 @@ class MainViewModel @Inject constructor(
         )
 
     init {
+        initializeTodayRecord()
+    }
+
+    fun initializeTodayRecord() {
         viewModelScope.launch {
             userRecordRepository.initializeTodayRecord()
         }

@@ -49,9 +49,9 @@ fun TotalSection(
 ) {
     val today = LocalDate.now()
     val filteredRecords = when (selectedDuration.value) {
-        WEEK -> records.value.filter { it.date != null && it.date!! >= today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)) }
-        MONTH -> records.value.filter { it.date != null && it.date!! >= today.withDayOfMonth(1) }
-        YEAR -> records.value.filter { it.date != null && it.date!! >= today.withDayOfYear(1) }
+        WEEK -> records.value.filter { it.date != null && it.date >= today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)) }
+        MONTH -> records.value.filter { it.date != null && it.date >= today.withDayOfMonth(1) }
+        YEAR -> records.value.filter { it.date != null && it.date >= today.withDayOfYear(1) }
     }
 
     val totalCalories = filteredRecords.sumOf { it.calories ?: 0.0 }
