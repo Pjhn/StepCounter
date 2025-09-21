@@ -13,6 +13,8 @@ import androidx.compose.runtime.setValue
 
 @Composable
 fun NumberInputDialog(
+    title: String,
+    label: String,
     initialNumber: Int,
     onDismiss: () -> Unit,
     onConfirm: (Int) -> Unit,
@@ -21,12 +23,12 @@ fun NumberInputDialog(
     val isValid = text.toIntOrNull() != null
 
     AlertDialog(
-        title = { Text(text = "Set step goal") },
+        title = { Text(text = title) },
         text = {
             OutlinedTextField(
                 value = text,
                 onValueChange = { new -> text = new.filter { it.isDigit() } },
-                label = { Text("Step goal") },
+                label = { Text(text = label) },
                 supportingText = { Text("Enter a number") },
                 singleLine = true,
             )
