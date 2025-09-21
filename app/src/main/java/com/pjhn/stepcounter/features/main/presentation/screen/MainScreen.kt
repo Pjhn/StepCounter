@@ -1,5 +1,6 @@
 package com.pjhn.stepcounter.features.main.presentation.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +45,7 @@ import com.pjhn.stepcounter.features.main.presentation.screen.components.Primary
 import com.pjhn.stepcounter.features.main.presentation.screen.components.RecordDetailSection
 import com.pjhn.stepcounter.features.main.presentation.screen.components.StepCountSection
 import com.pjhn.stepcounter.features.main.presentation.screen.components.StepGoalSection
+import com.pjhn.stepcounter.features.main.service.MeasurementService
 import com.pjhn.stepcounter.ui.dialog.NumberInputDialog
 import com.pjhn.stepcounter.ui.dialog.PermissionDialog
 import com.pjhn.stepcounter.util.DateFormatter
@@ -96,7 +98,13 @@ fun MainScreen(
                 stepRecord = stepRecord,
                 stepGoal = stepGoal,
                 onEditGoal = { openAlertDialog = true },
-                onEditRecord = { openEditRecordDialog = true },
+                onEditRecord = {
+                    if (MeasurementService.isServiceRunning) {
+                        Toast.makeText(context, "Stop measurement first", Toast.LENGTH_SHORT).show()
+                    }else{
+                        openEditRecordDialog = true
+                    }
+                               },
                 paddingValues = paddingValues
             )
         }
