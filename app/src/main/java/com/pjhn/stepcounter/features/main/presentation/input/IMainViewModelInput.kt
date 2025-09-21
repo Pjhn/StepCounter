@@ -13,5 +13,7 @@ interface IMainViewModelInput {
 
     fun updateStepGoal(stepGoal: Int)
 
+    fun updateStepCount(stepCount: Int)
+
     fun togglePermissionDialog(open: Boolean)
 }

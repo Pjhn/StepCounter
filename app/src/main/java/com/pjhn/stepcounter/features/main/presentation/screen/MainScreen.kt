@@ -60,6 +60,7 @@ fun MainScreen(
     openPermissionDialog: State<Boolean>
 ) {
     var openAlertDialog by remember { mutableStateOf(false) }
+    var openEditRecordDialog by remember { mutableStateOf(false) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -95,12 +96,15 @@ fun MainScreen(
                 stepRecord = stepRecord,
                 stepGoal = stepGoal,
                 onEditGoal = { openAlertDialog = true },
+                onEditRecord = { openEditRecordDialog = true },
                 paddingValues = paddingValues
             )
         }
 
         if (openAlertDialog) {
             NumberInputDialog(
+                title = "Set Step Goal",
+                label = "Step Goal",
                 initialNumber = stepGoal.value,
                 onConfirm = { new ->
                     input.updateStepGoal(new)
@@ -108,6 +112,21 @@ fun MainScreen(
                 },
                 onDismiss = {
                     openAlertDialog = false
+                }
+            )
+        }
+
+        if (openEditRecordDialog) {
+            NumberInputDialog(
+                title = "Edit Step Count",
+                label = "Step Count",
+                initialNumber = stepRecord.value.stepCount ?: 0,
+                onConfirm = { new ->
+                    input.updateStepCount(new)
+                    openEditRecordDialog = false
+                },
+                onDismiss = {
+                    openEditRecordDialog = false
                 }
             )
         }
@@ -132,6 +151,7 @@ fun MainContent(
     stepRecord: State<StepRecord>,
     stepGoal: State<Int>,
     onEditGoal: () -> Unit,
+    onEditRecord: () -> Unit,
     paddingValues: PaddingValues
 ) {
     Column(
@@ -146,7 +166,8 @@ fun MainContent(
 
         StepCountSection(
             stepRecord = stepRecord,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            buttonOnClick = onEditRecord
         )
 
         StepGoalSection(

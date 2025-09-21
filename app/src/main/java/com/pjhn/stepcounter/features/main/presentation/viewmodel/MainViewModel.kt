@@ -141,6 +141,16 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    override fun updateStepCount(stepCount: Int) {
+        viewModelScope.launch {
+            userRecordRepository.saveUserRecord(
+                StepRecord(
+                    stepCount = stepCount,
+                )
+            )
+        }
+    }
+
     override fun togglePermissionDialog(open: Boolean) {
         viewModelScope.launch {
             _openDialogState.value = open
