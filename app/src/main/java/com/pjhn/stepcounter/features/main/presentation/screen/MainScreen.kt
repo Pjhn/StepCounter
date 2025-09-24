@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,6 +46,7 @@ import com.pjhn.stepcounter.features.main.presentation.screen.components.Primary
 import com.pjhn.stepcounter.features.main.presentation.screen.components.RecordDetailSection
 import com.pjhn.stepcounter.features.main.presentation.screen.components.StepCountSection
 import com.pjhn.stepcounter.features.main.presentation.screen.components.StepGoalSection
+import com.pjhn.stepcounter.features.main.presentation.screen.components.dialog.BmiCalculatorDialog
 import com.pjhn.stepcounter.features.main.service.MeasurementService
 import com.pjhn.stepcounter.ui.dialog.NumberInputDialog
 import com.pjhn.stepcounter.ui.dialog.PermissionDialog
@@ -63,6 +65,11 @@ fun MainScreen(
 ) {
     var openAlertDialog by remember { mutableStateOf(false) }
     var openEditRecordDialog by remember { mutableStateOf(false) }
+    var openBmiCalculatorDialog by remember { mutableStateOf(false) }
+
+    var weight by rememberSaveable { mutableStateOf(0.toString()) }
+    var height by rememberSaveable { mutableStateOf(0.toString()) }
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -88,7 +95,8 @@ fun MainScreen(
                         .format(DateFormatter.iso),
                     input = input,
                     scope = scope,
-                    drawerState = drawerState
+                    drawerState = drawerState,
+                    onCalculatorClicked = { openBmiCalculatorDialog = true }
                 )
             }
         ) { paddingValues ->
@@ -101,10 +109,10 @@ fun MainScreen(
                 onEditRecord = {
                     if (MeasurementService.isServiceRunning) {
                         Toast.makeText(context, "Stop measurement first", Toast.LENGTH_SHORT).show()
-                    }else{
+                    } else {
                         openEditRecordDialog = true
                     }
-                               },
+                },
                 paddingValues = paddingValues
             )
         }
@@ -136,6 +144,17 @@ fun MainScreen(
                 onDismiss = {
                     openEditRecordDialog = false
                 }
+            )
+        }
+
+        if (openBmiCalculatorDialog) {
+            BmiCalculatorDialog(
+                title = "BMI Calculator",
+                weight = weight,
+                height = height,
+                onWeightChange = { weight = it },
+                onHeightChange = { height = it },
+                onDismiss = { openBmiCalculatorDialog = false }
             )
         }
 

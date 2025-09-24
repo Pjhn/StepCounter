@@ -1,5 +1,8 @@
 package com.pjhn.stepcounter.features.main.presentation.screen.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerState
@@ -11,6 +14,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.res.vectorResource
 import com.pjhn.stepcounter.R
 import com.pjhn.stepcounter.features.main.presentation.input.IMainViewModelInput
@@ -28,7 +32,8 @@ fun MainTopAppBar(
     title: String,
     input: IMainViewModelInput,
     scope: CoroutineScope,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    onCalculatorClicked: () -> Unit
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(
@@ -61,15 +66,28 @@ fun MainTopAppBar(
             )
         },
         actions = {
-            CustomIconButton(
-                onClick = { input.openRecord() },
-                icon = {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_chart),
-                        contentDescription = "record"
-                    )
-                }
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(Paddings.small)
+            ) {
+                CustomIconButton(
+                    onClick = { onCalculatorClicked() },
+                    icon = {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_bmi),
+                            contentDescription = "bmi calculator"
+                        )
+                    }
+                )
+                CustomIconButton(
+                    onClick = { input.openRecord() },
+                    icon = {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_chart),
+                            contentDescription = "record"
+                        )
+                    }
+                )
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.background),
     )
